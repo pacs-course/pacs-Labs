@@ -15,15 +15,15 @@ public:
     m_h(h), 
     m_deg(deg) {}
   double operator()(double x) {
-    return f_prime(x, m_f, m_deg);
+    return f_prime(x, m_deg);
   }
 private:
-  double f_prime(double x, func_t f, unsigned deg) {
+  double f_prime(double x, unsigned deg) {
     if(deg == 0)
-      return f(x);
+      return m_f(x);
     if(deg == 1)
-      return (f(x + m_h) - f(x)) / m_h;
-    return (f_prime(x + m_h, f, deg - 1) - f_prime(x, f, deg - 1)) / m_h;
+      return (m_f(x + m_h) - m_f(x)) / m_h;
+    return (f_prime(x + m_h, deg - 1) - f_prime(x, deg - 1)) / m_h;
   }
 
   const func_t m_f;
@@ -40,16 +40,16 @@ public:
     m_h(h), 
     m_deg(deg) {}
   double operator()(double x) {
-    return f_prime(x, m_f, m_deg, true);
+    return f_prime(x, m_deg, true);
   }
 private:
-  double f_prime(double x, func_t f, unsigned deg, bool is_fw) {
+  double f_prime(double x, unsigned deg, bool is_fw) {
     if(deg == 0)
-      return f(x);
+      return m_f(x);
     if(is_fw)
-      return (f_prime(x + m_h, f, deg - 1, !is_fw) - f_prime(x, f, deg - 1, !is_fw)) / m_h;
+      return (f_prime(x + m_h, deg - 1, !is_fw) - f_prime(x, deg - 1, !is_fw)) / m_h;
     else
-      return (f_prime(x, f, deg - 1, !is_fw) - f_prime(x - m_h, f, deg - 1, !is_fw)) / m_h;
+      return (f_prime(x, deg - 1, !is_fw) - f_prime(x - m_h, deg - 1, !is_fw)) / m_h;
   }
 
   const func_t m_f;
@@ -84,7 +84,7 @@ public:
     return m_f(x);
   }
 private:
-  const func_t m_f;
+  const func_t &m_f;
   const double m_h;
 };
 
@@ -118,7 +118,7 @@ public:
     return m_f(x);
   }
 private:
-  const func_t m_f;
+  const func_t &m_f;
   const double m_h;
 };
 
