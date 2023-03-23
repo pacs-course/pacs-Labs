@@ -10,7 +10,7 @@ main(int argc, char **argv)
 {
   const unsigned int n = 10;
 
-  sparse_matrix A;
+  SparseMatrix<double> A;
   A.resize(n);
 
   for (unsigned int i = 0; i < n; ++i)
