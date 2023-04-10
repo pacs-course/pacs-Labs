@@ -7,9 +7,8 @@
 #include <functional>
 
 /// The two kinds of RK solver for scalar and vector differential problems.
-class RKFType
-{
-public:
+class RKFType {
+ public:
   using Scalar = double;
   using Vector = Eigen::VectorXd;
 };
@@ -17,36 +16,26 @@ public:
 /// Primary class template.
 /// This class is in principle also valid for matrix problems.
 template <class ProblemType>
-class RKFTraits
-{
-public:
+class RKFTraits {
+ public:
   using VariableType = ProblemType;
 
   using ForcingTermType =
-    std::function<VariableType(const double &, const VariableType &)>;
+      std::function<VariableType(const double&, const VariableType&)>;
 
-  static double
-  norm(const VariableType &x)
-  {
-    return x.norm();
-  }
+  static double norm(const VariableType& x) { return x.norm(); }
 };
 
 /// Specialization for scalar problems.
 template <>
-class RKFTraits<RKFType::Scalar>
-{
-public:
+class RKFTraits<RKFType::Scalar> {
+ public:
   using VariableType = RKFType::Scalar;
 
   using ForcingTermType =
-    std::function<VariableType(const double &, const VariableType &)>;
+      std::function<VariableType(const double&, const VariableType&)>;
 
-  static double
-  norm(const VariableType &x)
-  {
-    return std::abs(x);
-  }
+  static double norm(const VariableType& x) { return std::abs(x); }
 };
 
 #endif /* RKFTRAITS_HPP */

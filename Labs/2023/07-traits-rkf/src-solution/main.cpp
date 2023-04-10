@@ -4,32 +4,30 @@
 #include <fstream>
 #include <iostream>
 
-int
-main(int argc, char **argv)
-{
+int main(int argc, char** argv) {
   // Model problem.
   {
-    const auto f = [](const double &t, const double &y) { return -10 * y; };
-    const auto sol_exact = [](const double &t) { return std::exp(-10 * t); };
+    const auto f = [](const double& t, const double& y) { return -10 * y; };
+    const auto sol_exact = [](const double& t) { return std::exp(-10 * t); };
 
-    const double       t0          = 0;
-    const double       tf          = 10;
-    const double       y0          = 1;
-    const double       h0          = 0.2;
-    const double       tolerance   = 1e-4;
+    const double t0 = 0;
+    const double tf = 10;
+    const double y0 = 1;
+    const double h0 = 0.2;
+    const double tolerance = 1e-4;
     const unsigned int n_max_steps = 1e4;
 
     RKF<RKFScheme::RK23_t, RKFType::Scalar> solver(RKFScheme::RK23, f);
 
-    const auto solution = solver(t0, tf, y0, h0, tolerance, n_max_steps);
+    const auto solution = solver.solve(t0, tf, y0, h0, tolerance, n_max_steps);
 
     // Compute error.
-    double       max_error = 0;
-    unsigned int count     = 0;
+    double max_error = 0;
+    unsigned int count = 0;
 
     for (const auto val : solution.y)
-      max_error =
-        std::max(max_error, std::abs(val - sol_exact(solution.time[count++])));
+      max_error = std::max(max_error,
+                           std::abs(val - sol_exact(solution.time[count++])));
 
     std::cout << std::boolalpha;
     std::cout << "*** Model problem ***" << std::endl
@@ -40,13 +38,12 @@ main(int argc, char **argv)
     std::cout << std::endl;
 
     std::ofstream file("results_exp.out");
-    file << solution;
+    print(file, solution);
   }
-
 
   // Van der Pol oscillator problem with mu = 1.
   {
-    const auto f = [](const double &t, const Eigen::VectorXd &y) {
+    const auto f = [](const double& t, const Eigen::VectorXd& y) {
       const double mu = 1;
 
       Eigen::VectorXd out(2);
@@ -63,13 +60,13 @@ main(int argc, char **argv)
     y0[0] = 1;
     y0[1] = 1;
 
-    const double       h0          = 0.2;
-    const double       tolerance   = 1e-4;
+    const double h0 = 0.2;
+    const double tolerance = 1e-4;
     const unsigned int n_max_steps = 5e3;
 
     RKF<RKFScheme::RK45_t, RKFType::Vector> solver(RKFScheme::RK45, f);
 
-    const auto solution = solver(t0, tf, y0, h0, tolerance, n_max_steps);
+    const auto solution = solver.solve(t0, tf, y0, h0, tolerance, n_max_steps);
 
     std::cout << std::boolalpha;
     std::cout << "*** Van der Pol oscillator ***" << std::endl
@@ -79,7 +76,7 @@ main(int argc, char **argv)
     std::cout << std::endl;
 
     std::ofstream file("results_VdP.out");
-    file << solution;
+    // file << solution;
   }
 
   return 0;
