@@ -232,13 +232,11 @@ auto RKF<ButcherType, ProblemType>::RKFstep(const double& t,
 /// Output stream for gnuplot.
 /// Possible extension: export also an exact solution, if provided.
 template <class RKFResultType>
-void print(
-    std::ostream& out,
-    const RKFResultType& res) {
-  out << "# Number ot time steps: " << res.time.size() << std::endl
-      << "# Number of reductions: " << res.reductions << std::endl
-      << "# Number of expansions: " << res.expansions << std::endl
-      << "# Error estimate: " << res.error_estimate << std::endl;
+void print(std::ostream& out, const RKFResultType& res) {
+  out << "# Number ot time steps: " << res.time.size() << "\n"
+      << "# Number of reductions: " << res.reductions << "\n"
+      << "# Number of expansions: " << res.expansions << "\n"
+      << "# Error estimate: " << res.error_estimate << "\n";
 
   double h_min = res.time[1] - res.time[0];
   double h_max = h_min;
@@ -249,22 +247,26 @@ void print(
     h_min = std::min(h_min, dt);
   }
 
-  out << "# h_min: " << h_min << ", h_max: " << h_max << std::endl;
+  out << "# h_min: " << h_min << ", h_max: " << h_max << "\n";
 
-  out << "# t ";
-  if constexpr (std::is_same_v<typename decltype(res.y)::value_type, RKFType::Scalar>)
+  out << "t\t";
+  if constexpr (std::is_same_v<typename decltype(res.y)::value_type,
+                               RKFType::Scalar>)
     out << "y";
-  else  // if constexpr (std::is_same_v<ProblemType, RKFType::Vector>)
-    out << "y[0] ... y[" << res.y[0].size() - 1 << "]";
+  else {  // if constexpr (std::is_same_v<ProblemType, RKFType::Vector>)
+    for (int k = 0; k < res.y[0].size(); ++k)
+      out << "y[" << k << "]\t";
+  }
 
-  out << std::endl;
+  out << "\n";
 
   size_t i = 0;
   for (const auto& t : res.time) {
     out << "  " << t << "\t";
     const auto& yy = res.y[i];
 
-    if constexpr (std::is_same_v<typename decltype(res.y)::value_type, RKFType::Scalar>) {
+    if constexpr (std::is_same_v<typename decltype(res.y)::value_type,
+                                 RKFType::Scalar>) {
       out << res.y[i];
     } else  // if constexpr (std::is_same_v<ProblemType, RKFType::Vector>)
     {
@@ -272,7 +274,7 @@ void print(
         out << yy[k] << "\t";
     }
 
-    out << std::endl;
+    out << "\n";
     ++i;
   }
 }

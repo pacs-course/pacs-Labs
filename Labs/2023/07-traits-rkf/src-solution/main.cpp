@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
               << "  Error estimate: " << solution.error_estimate << std::endl;
     std::cout << std::endl;
 
-    std::ofstream file("results_exp.out");
+    std::ofstream file("data/results_exp.out");
     print(file, solution);
   }
 
@@ -75,8 +75,8 @@ int main(int argc, char** argv) {
               << "  Error estimate: " << solution.error_estimate << std::endl;
     std::cout << std::endl;
 
-    std::ofstream file("results_VdP.out");
-    // file << solution;
+    std::ofstream file("data/results_VdP.out");
+    print(file, solution);
   }
 
   return 0;
