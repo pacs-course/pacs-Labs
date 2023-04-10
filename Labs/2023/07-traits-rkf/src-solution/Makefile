@@ -1,5 +1,5 @@
 CXX      ?= g++
-CXXFLAGS ?= -std=c++17
+CXXFLAGS ?= -std=c++20 -Wno-deprecated-enum-enum-conversion # last flag for Eigen
 CPPFLAGS ?= -O3 -Wall -pedantic -I. -I${mkEigenInc}
 LDLIBS   ?= 
 LINK.o := $(LINK.cc) # Use C++ linker.

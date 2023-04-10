@@ -8,51 +8,52 @@
 #include <limits>
 #include <vector>
 
-template <class T, class... Ts>
-inline constexpr bool is_any_v = (std::disjunction_v<std::is_same<T, Ts>...>);
+template <typename T>
+concept IsButcherArray =
+    instance_of_non_type<ButcherArray,
+                         decltype(base_of(&T::A))>  // the base class of T is
+                                                    // ButcherArray<N>
+    && !
+std::is_same<T, decltype(base_of(&T::A))>::value;  // T is not a ButcherArray<N>
+
+/// Struct holding the results of the RKF solver.
+template <ScalarOrVector VariableType>
+struct RKFResult {
+  /// Time steps.
+  std::vector<double> time;
+
+  /// Solutions.
+  std::vector<VariableType> y;
+
+  /// Error estimate.
+  double error_estimate = 0.0;
+
+  /// Failure.
+  bool failed = false;
+
+  /// Number of time step expansions.
+  unsigned int expansions = 0;
+
+  /// Number of time step reductions.
+  unsigned int reductions = 0;
+};
 
 /// Runge-Kutta-Fehlberg solver class.
-template <class ButcherType, class ProblemType>
+template <IsButcherArray ButcherType,
+          ScalarOrVector VariableType,
+          Scalar TimeType = double>
 class RKF {
  public:
-  using VariableType = typename RKFTraits<ProblemType>::VariableType;
-  using Function = typename RKFTraits<ProblemType>::ForcingTermType;
-  /// Struct holding the results of the RKF solver.
-  struct RKFResult {
-    /// Time steps.
-    std::vector<double> time;
-
-    /// Solutions.
-    std::vector<VariableType> y;
-
-    /// Error estimate.
-    double error_estimate = 0.0;
-
-    /// Failure.
-    bool failed = false;
-
-    /// Number of time step expansions.
-    unsigned int expansions = 0;
-
-    /// Number of time step reductions.
-    unsigned int reductions = 0;
-  };
+  using Function = std::function<VariableType(TimeType, const VariableType&)>;
 
   /// Default constructor.
   RKF() = default;
 
   /// Constructor.
-  RKF(const ButcherType& table_, const Function& function_)
-      : m_table(table_), m_function(function_) {
-    static_assert(is_any_v<ProblemType, RKFType::Scalar, RKFType::Vector>,
-                  "Wrong problem type specified.");
-  }
+  RKF(const Function& function_) : m_function(function_) {}
 
   /// Set the forcing term.
   void set_function(const Function& function_) { m_function = function_; }
-
-  /// Set the Butcher array.
-  void set_table(const ButcherType& table_) { m_table = table_; }
 
   /**
    * Solve problem.
@@ -66,14 +67,14 @@ class RKF {
    * @param[in] factor_reduction Multiplication factor for time step reduction.
    * @param[in] factor_expansion Multiplication factor for time step expansion.
    */
-  RKFResult solve(const double& t0,
-                  const double& tf,
-                  const VariableType& y0,
-                  const double& h0,
-                  const double& tol,
-                  const unsigned int& n_max_steps,
-                  const double& factor_reduction = 0.95,
-                  const double& factor_expansion = 2) const;
+  RKFResult<VariableType> solve(TimeType t0,
+                                TimeType tf,
+                                const VariableType& y0,
+                                TimeType h0,
+                                TimeType tol,
+                                unsigned int n_max_steps,
+                                TimeType factor_reduction = 0.95,
+                                TimeType factor_expansion = 2) const;
 
  private:
   /**
@@ -85,24 +86,38 @@ class RKF {
    *
    * @return The low- and high-order solutions.
    */
-  auto RKFstep(const double& t, const VariableType& y, const double& h) const
+  auto RKFstep(TimeType t, const VariableType& y, TimeType h) const
       -> std::pair<VariableType, VariableType>;
 
-  ButcherType m_table;
+  inline static auto norm(const VariableType& x) {
+    if constexpr (Scalar<VariableType>) {
+      // only issue here is that if sizeof(VariableType) < 8
+      // we are a little bit inefficient since we are passing by
+      // reference (i.e. copy the address of the variable which has size
+      // 64bit on most architectures) instead of passing by copy
+      return std::abs(x);
+    } else {
+      return x.norm();
+    }
+  }
+
+  const ButcherType m_table;
   Function m_function;
 };
 
-template <class ButcherType, class ProblemType>
-typename RKF<ButcherType, ProblemType>::RKFResult
-RKF<ButcherType, ProblemType>::solve(const double& t0,
-                                     const double& tf,
-                                     const VariableType& y0,
-                                     const double& h0,
-                                     const double& tol,
-                                     const unsigned int& n_max_steps,
-                                     const double& factor_reduction,
-                                     const double& factor_expansion) const {
-  RKFResult result;
+template <IsButcherArray ButcherType,
+          ScalarOrVector VariableType,
+          Scalar TimeType>
+RKFResult<VariableType> RKF<ButcherType, VariableType, TimeType>::solve(
+    TimeType t0,
+    TimeType tf,
+    const VariableType& y0,
+    TimeType h0,
+    TimeType tol,
+    unsigned int n_max_steps,
+    TimeType factor_reduction,
+    TimeType factor_expansion) const {
+  RKFResult<VariableType> result;
 
   auto& [time, y, error_estimate, failed, expansions, reductions] = result;
 
@@ -125,11 +140,12 @@ RKF<ButcherType, ProblemType>::solve(const double& t0,
   bool rejected = false;
 
   // Check that the time step does not become ridiculously small.
-  const double time_span = tf - t0;
-  double t = t0;
+  const auto time_span = tf - t0;
+  auto t = t0;
 
-  const double h_min = 100 * (tf - t0) * std::numeric_limits<double>::epsilon();
-  double h = std::max(h0, h_min);
+  const auto h_min =
+      100 * time_span * std::numeric_limits<decltype(time_span)>::epsilon();
+  auto h = std::max(h0, h_min);
 
   VariableType y_curr = y0;
 
@@ -157,7 +173,7 @@ RKF<ButcherType, ProblemType>::solve(const double& t0,
         std::tie(y_low, y_high) = RKFstep(t, y_curr, h);
     }
 
-    const double error = RKFTraits<ProblemType>::norm(y_low - y_high);
+    const auto error = norm(y_low - y_high);
 
     if (error <= tol * h / time_span) {
       t += h;
@@ -193,11 +209,13 @@ RKF<ButcherType, ProblemType>::solve(const double& t0,
   return result;
 }
 
-template <class ButcherType, class ProblemType>
-auto RKF<ButcherType, ProblemType>::RKFstep(const double& t,
-                                            const VariableType& y,
-                                            const double& h) const
-    -> std::pair<VariableType, VariableType> {
+template <IsButcherArray ButcherType,
+          ScalarOrVector VariableType,
+          Scalar TimeType>
+std::pair<VariableType, VariableType>
+RKF<ButcherType, VariableType, TimeType>::RKFstep(TimeType t,
+                                                  const VariableType& y,
+                                                  TimeType h) const {
   constexpr auto n_stages = ButcherType::n_stages();
 
   std::array<VariableType, n_stages> K;
@@ -210,7 +228,7 @@ auto RKF<ButcherType, ProblemType>::RKFstep(const double& t,
   // The first step is always an Euler step.
   K[0] = m_function(t, y);
   for (size_t i = 1; i < n_stages; ++i) {
-    const double time = t + c[i] * h;
+    const auto time = t + c[i] * h;
 
     VariableType value = y;
     for (unsigned int j = 0; j < i; ++j)
@@ -231,15 +249,15 @@ auto RKF<ButcherType, ProblemType>::RKFstep(const double& t,
 
 /// Output stream for gnuplot.
 /// Possible extension: export also an exact solution, if provided.
-template <class RKFResultType>
-void print(std::ostream& out, const RKFResultType& res) {
+template<ScalarOrVector VariableType>
+std::ostream& operator<<(std::ostream& out, const RKFResult<VariableType>& res) {
   out << "# Number ot time steps: " << res.time.size() << "\n"
       << "# Number of reductions: " << res.reductions << "\n"
       << "# Number of expansions: " << res.expansions << "\n"
       << "# Error estimate: " << res.error_estimate << "\n";
 
-  double h_min = res.time[1] - res.time[0];
-  double h_max = h_min;
+  auto h_min = res.time[1] - res.time[0];
+  auto h_max = h_min;
 
   for (unsigned int i = 0; i < res.time.size() - 1; ++i) {
     const auto dt = res.time[i + 1] - res.time[i];
@@ -250,8 +268,7 @@ void print(std::ostream& out, const RKFResultType& res) {
   out << "# h_min: " << h_min << ", h_max: " << h_max << "\n";
 
   out << "t\t";
-  if constexpr (std::is_same_v<typename decltype(res.y)::value_type,
-                               RKFType::Scalar>)
+  if constexpr (Scalar<VariableType>)
     out << "y";
   else {  // if constexpr (std::is_same_v<ProblemType, RKFType::Vector>)
     for (int k = 0; k < res.y[0].size(); ++k)
@@ -265,8 +282,7 @@ void print(std::ostream& out, const RKFResultType& res) {
     out << "  " << t << "\t";
     const auto& yy = res.y[i];
 
-    if constexpr (std::is_same_v<typename decltype(res.y)::value_type,
-                                 RKFType::Scalar>) {
+    if constexpr (Scalar<VariableType>) {
       out << res.y[i];
     } else  // if constexpr (std::is_same_v<ProblemType, RKFType::Vector>)
     {
@@ -277,6 +293,7 @@ void print(std::ostream& out, const RKFResultType& res) {
     out << "\n";
     ++i;
   }
+  return out;
 }
 
 #endif /* RKF_HPP */

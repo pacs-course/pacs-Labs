@@ -4,6 +4,8 @@
 #include <fstream>
 #include <iostream>
 
+#include <Eigen/Dense>
+
 int main(int argc, char** argv) {
   // Model problem.
   {
@@ -17,7 +19,7 @@ int main(int argc, char** argv) {
     const double tolerance = 1e-4;
     const unsigned int n_max_steps = 1e4;
 
-    RKF<RKFScheme::RK23_t, RKFType::Scalar> solver(RKFScheme::RK23, f);
+    RKF<RKFScheme::RK23_t, double> solver(f);
 
     const auto solution = solver.solve(t0, tf, y0, h0, tolerance, n_max_steps);
 
@@ -38,7 +40,7 @@ int main(int argc, char** argv) {
     std::cout << std::endl;
 
     std::ofstream file("data/results_exp.out");
-    print(file, solution);
+    file << solution;
   }
 
   // Van der Pol oscillator problem with mu = 1.
@@ -64,7 +66,7 @@ int main(int argc, char** argv) {
     const double tolerance = 1e-4;
     const unsigned int n_max_steps = 5e3;
 
-    RKF<RKFScheme::RK45_t, RKFType::Vector> solver(RKFScheme::RK45, f);
+    RKF<RKFScheme::RK45_t, Eigen::VectorXd> solver(f);
 
     const auto solution = solver.solve(t0, tf, y0, h0, tolerance, n_max_steps);
 
@@ -76,7 +78,7 @@ int main(int argc, char** argv) {
     std::cout << std::endl;
 
     std::ofstream file("data/results_VdP.out");
-    print(file, solution);
+    file << solution;
   }
 
   return 0;

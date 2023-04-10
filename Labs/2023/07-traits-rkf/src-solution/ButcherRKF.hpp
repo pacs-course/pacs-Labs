@@ -115,13 +115,6 @@ class RK12_t : public ButcherArray<2> {
                         2} {}
 };
 
-/// C++17 here!
-static inline const RK45_t RK45{};
-
-static inline const RK23_t RK23{};
-
-static inline const RK12_t RK12{};
-
 }  // namespace RKFScheme
 
 #endif /* BUTCHERRKF_HPP */
