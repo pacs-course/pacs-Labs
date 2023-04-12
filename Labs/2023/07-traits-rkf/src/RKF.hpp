@@ -12,31 +12,19 @@
 #include <functional>
 
 /// Static function to evaluate the norm of a VariableType
-template <ScalarOrVector VariableType>
-inline static auto norm(const VariableType& x) {
-  if constexpr (Scalar<VariableType>) {
-    // only issue here is that if sizeof(VariableType) < 8
-    // we are a little bit inefficient since we are passing by
-    // reference (i.e. copy the address of the variable which has size
-    // 64bit on most architectures) instead of passing by copy
-    return std::abs(x);
-  } else {
-    return x.norm();
-  }
-}
+// TODO
 
 /// Struct holding the results of the RKF solver.
-template <ScalarOrVector VariableType, Scalar TimeType>
+template </*TODO*/>
 struct RKFResult {
-  using ErrorType = decltype(norm(VariableType{}));
   /// Time steps.
-  std::vector<TimeType> time;
+  std::vector</*TODO*/> time;
 
   /// Solutions.
-  std::vector<VariableType> y;
+  std::vector</*TODO*/> y;
 
   /// Error estimate.
-  ErrorType error_estimate = 0.0;
+  /*TODO*/ error_estimate = 0.0;
 
   /// Failure.
   bool failed = false;
@@ -54,12 +42,11 @@ struct RKFResult {
 // Concepts are a way to write code that is easier to read and debug.
 // You have to evaluate the trade-off between using
 // a plain "typename/class" vs defining an ad-hoc "concept".
-template <class ButcherType,
-          ScalarOrVector VariableType,
-          Scalar TimeType = double>
+template </*TODO*/>
 class RKF {
  public:
-  using Function = std::function<VariableType(TimeType, const VariableType&)>;
+  // define Function type
+  /*TODO*/
 
   /// Default constructor.
   RKF() = default;
@@ -82,7 +69,7 @@ class RKF {
    * @param[in] factor_reduction Multiplication factor for time step reduction.
    * @param[in] factor_expansion Multiplication factor for time step expansion.
    */
-  RKFResult<VariableType, TimeType> solve(TimeType t0,
+  RKFResult</*TODO*/> solve(TimeType t0,
                                           TimeType tf,
                                           const VariableType& y0,
                                           TimeType h0,
@@ -108,9 +95,7 @@ class RKF {
   Function m_function;
 };
 
-template <class ButcherType, ScalarOrVector VariableType, Scalar TimeType>
-RKFResult<VariableType, TimeType>
-RKF<ButcherType, VariableType, TimeType>::solve(
+/*TODO: finish method definition*/::solve(
     TimeType t0,
     TimeType tf,
     const VariableType& y0,
@@ -119,84 +104,47 @@ RKF<ButcherType, VariableType, TimeType>::solve(
     unsigned int n_max_steps,
     TimeType factor_reduction,
     TimeType factor_expansion) const {
-  RKFResult<VariableType, TimeType> result;
 
-  auto& [time, y, error_estimate, failed, expansions, reductions] = result;
-
-  error_estimate = 0.0;
-  failed = false;
-  expansions = 0;
-  reductions = 0;
+  // Initialize result
+  // TODO
 
   // Reserve some estimated space according to data.
-  const size_t n_expected_steps = std::min(
-      std::max(1u, 1 + static_cast<unsigned int>((tf - t0) / h0)), n_max_steps);
-
-  time.reserve(n_expected_steps);
-  y.reserve(n_expected_steps);
+  // TODO
 
   // Push initial step.
-  time.push_back(t0);
-  y.push_back(y0);
+  // TODO
 
-  bool rejected = false;
+  // Initialize time `t` and step `h` 
+  // TODO
 
-  // Check that the time step does not become ridiculously small.
-  const auto time_span = tf - t0;
-  auto t = t0;
-  auto h = h0;
+  // Loop over each timestep
+  for (unsigned iter = 0; iter < n_max_steps; ++iter) {
+    // Check if new time step will go past the final time, in case calculate
+    // `h` such that `t + h == tf`
+    // TODO
 
-  // declare outside because we need it after the loop
-  unsigned int iter = 0;
-  for (; iter < n_max_steps; ++iter) {
-    // Check if new time step will go past the final time.
-    if (t + h > tf) {
-      h = tf - t;  // Truncate time step.
-    } 
-    // Low and high precision solution.
-    const auto[y_low, y_high] = RKFstep(t, y.back(), h);
+    // use `RKFstep`
+    // TODO
 
-    const auto error = norm<VariableType>(y_low - y_high);
+    // update t and y
+    // TODO
 
-    if (error <= tol * h / time_span) {
-      t += h;
-
-      time.push_back(t);
-      y.push_back(y_high);
-
-      error_estimate += error;
-
-      if (!rejected && (t < tf)) {
-        h *= factor_expansion;
-        ++expansions;
-      }
-
-      rejected = false;
-    } else {
-      rejected = true;
-      ++reductions;
-      h *= factor_reduction;
-    }
-
-    if (t >= tf)
-      break;
+    // break if past final time
+    // TODO
   }
-
-  if ((iter >= n_max_steps) && (t < tf))
-    failed = true;
 
   return result;
 }
 
-template <class ButcherType, ScalarOrVector VariableType, Scalar TimeType>
-std::pair<VariableType, VariableType>
-RKF<ButcherType, VariableType, TimeType>::RKFstep(TimeType t,
-                                                  const VariableType& y,
-                                                  TimeType h) const {
-  constexpr auto n_stages = ButcherType::n_stages();
-
-  std::array<VariableType, n_stages> K;
-
+/*TODO: finish method definition*/ ::RKFstep(TimeType t,
+                                             const VariableType& y,
+                                             TimeType h) const {
+  // Initialize temporary memory for stages as std::array `K`
+  // You need to know how many stages this ButcherType has
+  // Remember that ButcherArray has a static constexpr method that can be useful
+  // TODO
+  
+  // for ease of use
   const auto& A = m_table.A;
   const auto& b1 = m_table.b1;
   const auto& b2 = m_table.b2;
@@ -205,20 +153,17 @@ RKF<ButcherType, VariableType, TimeType>::RKFstep(TimeType t,
   // The first step is always an Euler step.
   K[0] = m_function(t, y);
   for (size_t i = 1; i < n_stages; ++i) {
-    const auto time = t + c[i] * h;
-
-    VariableType value = y;
-    for (unsigned int j = 0; j < i; ++j)
-      value += h * A[i][j] * K[j];
-
-    K[i] = m_function(time, value);
+    // t* = t + c_i * h
+    // y* = y + \sum_{j = 0}^{i - 1} h * A_{ij} * K_j
+    // K_i = f(t*, y*)
+    // TODO
   }
 
   VariableType v1 = y;
   VariableType v2 = y;
-  for (unsigned int i = 0; i < n_stages; ++i) {
-    v1 += (h * b1[i]) * K[i] ;
-    v2 += (h * b2[i]) * K[i] ;
+  for (unsigned i = 0; i < n_stages; ++i) {
+    // v = v + h * b_i * K_i
+    // TODO: for both v1, v2 with b1 and b2, respectively
   }
 
   return std::make_pair(v1, v2);
@@ -229,15 +174,10 @@ RKF<ButcherType, VariableType, TimeType>::RKFstep(TimeType t,
 template <ScalarOrVector VariableType, Scalar TimeType>
 std::ostream& operator<<(std::ostream& out,
                          const RKFResult<VariableType, TimeType>& res) {
-  // set output to max precision
-  out << std::scientific;
-  if constexpr (Scalar<VariableType>)
-    out << std::setprecision(std::numeric_limits<VariableType>::digits10 + 1);
-  else {
-    using ScalarType = std::decay_t<decltype(res.y[0][0])>;
-    out << std::setprecision(std::numeric_limits<ScalarType>::digits10 + 1);
-  }
+  // set output to max precision using std::numeric_limits
+  // TODO
 
+  // write statistics
   out << "# Number ot time steps: " << res.time.size() << "\n"
       << "# Number of reductions: " << res.reductions << "\n"
       << "# Number of expansions: " << res.expansions << "\n"
@@ -254,26 +194,17 @@ std::ostream& operator<<(std::ostream& out,
 
   out << "# h_min: " << h_min << ", h_max: " << h_max << "\n";
 
-  // write header
+  // write header, "t,y" if scalar, "t,y[0],y[1],..." if vectorial
   out << "t\t";
-  if constexpr (Scalar<VariableType>)
-    out << "y";
-  else {
-    for (decltype(res.y[0].size()) k = 0; k < res.y[0].size(); ++k)
-      out << "y[" << k << "]\t";
-  }
+  // TODO
   out << "\n";
 
   // write data
   size_t i = 0;
   for (const auto& t : res.time) {
     out << t << "\t";
-    if constexpr (Scalar<VariableType>) {
-      out << res.y[i];
-    } else {
-      for (decltype(res.y[i].size()) k = 0; k < res.y[i].size(); ++k)
-        out << res.y[i][k] << "\t";
-    }
+    // TODO: hadle scalar or vectorial cases
+    
     out << "\n";
     ++i;
   }

@@ -33,11 +33,13 @@ concept Subscriptable = requires(T x) {
   { x.size() } -> std::integral;
 };
 
+// Define Vector concept
 template<typename T>
 concept Vector = Normable<T> && Addable<T> && ScalarMultiplicable<T> && Subscriptable<T>;
 
 // We want to use our ODE solver for both scalar and vectorial problems
 template<typename T>
 concept ScalarOrVector = Scalar<T> || Vector<T>;
+
 
 #endif /* RKFTRAITS_HPP */

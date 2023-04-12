@@ -27,14 +27,14 @@ void test_exp() {
 
   for (const auto val : solution.y)
     max_error =
-        std::max(max_error, std::abs(val - sol_exact(solution.time[count++])));
+    std::max(max_error, std::abs(val - sol_exact(solution.time[count++])));
 
   std::cout << std::boolalpha;
   std::cout << "*** Model problem ***" << std::endl
-            << "  l_inf error: " << max_error << std::endl
-            << "  Tolerance: " << tolerance << std::endl
-            << "  Failed: " << solution.failed << std::endl
-            << "  Error estimate: " << solution.error_estimate << std::endl;
+    << "  l_inf error: " << max_error << std::endl
+    << "  Tolerance: " << tolerance << std::endl
+    << "  Failed: " << solution.failed << std::endl
+    << "  Error estimate: " << solution.error_estimate << std::endl;
   std::cout << std::endl;
 
   std::ofstream file("data/results_exp.out");
@@ -69,9 +69,9 @@ void test_VdP() {
 
   std::cout << std::boolalpha;
   std::cout << "*** Van der Pol oscillator ***" << std::endl
-            << "  Tolerance: " << tolerance << std::endl
-            << "  Failed: " << solution.failed << std::endl
-            << "  Error estimate: " << solution.error_estimate << std::endl;
+    << "  Tolerance: " << tolerance << std::endl
+    << "  Failed: " << solution.failed << std::endl
+    << "  Error estimate: " << solution.error_estimate << std::endl;
   std::cout << std::endl;
 
   std::ofstream file("data/results_VdP.out");
@@ -82,7 +82,7 @@ void test_VdP() {
 // You should avoid inherinting from std container (when using polymorphism)
 // due to the absence of a virtual destructor. Also remember the "Is-a" rule.
 // Here we do it just for shortness
-struct Array : public std::array<double, 2> {
+struct Array: public std::array<double, 2> {
   double norm() const {
     return std::sqrt((*this)[0] * (*this)[0] + (*this)[1] * (*this)[1]);
   }
@@ -92,10 +92,10 @@ struct Array : public std::array<double, 2> {
     return *this;
   }
   friend Array operator-(Array lhs, const Array& rhs) {
-    return {{lhs[0] - rhs[0], lhs[1] - rhs[1]}};
+    return { {lhs[0] - rhs[0], lhs[1] - rhs[1]} };
   }
   friend Array operator*(double lhs, const Array& rhs) {
-    return {{lhs * rhs[0], lhs * rhs[1]}};
+    return { {lhs * rhs[0], lhs * rhs[1]} };
   }
 };
 
@@ -112,9 +112,6 @@ void test_custom_type() {
 }
 
 int main(int argc, char** argv) {
-  // Test with custum type, try it yourself to change the custom type
-  test_custom_type();
-
   // Model problem.
   test_exp();
 
