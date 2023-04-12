@@ -1,4 +1,4 @@
-\documentclass[10pt]{beamer}
+\documentclass[10pt,aspectratio=169]{beamer}
 \usetheme{default}
 \setbeamercovered{invisible}
 \setbeamertemplate{navigation symbols}{}
@@ -37,7 +37,7 @@
 }
 
 \begin{document}
-    \title{A Runge-Kutta-Fehlberg solver\protect\\using traits and \texttt{Eigen}\protect\\(part I)}
+    \title{A Runge-Kutta-Fehlberg solver\protect\\using traits and concepts\protect\\(part I)}
     \author{Matteo Caldana}
     \date{13/04/2023}
 
@@ -66,20 +66,21 @@ We recall that, at each time step \(t_n\), an embedded RKF method of order \(p\)
 The code structure is the following:
 \begin{itemize}
 \item \texttt{ButcherRKF} contains the definition of the Butcher tableaux for some common RKF methods.
-\item \texttt{RKFTraits} defines the basic structure that enables to statically select the type of the equation(s) to be solved (\textit{i.e.} scalar or vector).
+\item \texttt{RKFTraits} defines the basic structure that enables to bind the type of the equation(s) to be solved (\textit{i.e.} scalar or vector).
 \item \texttt{RKFResult} is a data structure containing the output of the RKF solver.
 \item \texttt{RKF} implements a generic RKF solver interface, filling a proper \texttt{RKFResult} object.
 \end{itemize}
 \vfill
 Starting from the provided solution sketch:
 \begin{enumerate}
-\item Implement the \texttt{RKFTraits} class defining common types for homogeneity.
+\item Implement the \texttt{concept}(s) defining a scalar and a vector in \texttt{RKFTraits.hpp}.
 \item Implement the \texttt{RKF::RKFstep} method, performing just one timestep of the RKF method.
 \item Implement the \texttt{RKF::solve()} time-advancing method, without error correction.
 \item Use the just implemented solver to solve the model problem and the Van der Pol oscillator problem defined in the \texttt{main.cpp} file.
 \item Include error correction into the solver and compare the results.
 \end{enumerate}
 \end{frame}
+
 \begin{frame}{Additional work}
   Maybe you want to extend the class to include Diagonally Implicit Runge Kutta Methods
   (DIRK), where the $A$ matrix of the Butcher array satisfies $A_{ij}=0$ if $j<i$, but
