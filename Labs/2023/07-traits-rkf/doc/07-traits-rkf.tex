@@ -46,7 +46,7 @@
 \end{frame}
 
 \begin{frame}{RKF solver}
-This exercise (a modified version of \texttt{Examples/src/RKFSolver}) is about a set of tools that implements embedded Runge-Kutta-Fehlberg methods to solve non-linear scalar and vector Ordinary Differential Equations, based on the \texttt{Eigen} library.
+This exercise (a modified version of \texttt{Examples/src/RKFSolver}) is about a set of tools that implements embedded Runge-Kutta-Fehlberg (explicit) methods to solve non-linear scalar and vector Ordinary Differential Equations, based on the \texttt{Eigen} library.
 \vfill
 Consider an ODE of the form
 \begin{equation*}
@@ -80,5 +80,21 @@ Starting from the provided solution sketch:
 \item Include error correction into the solver and compare the results.
 \end{enumerate}
 \end{frame}
+\begin{frame}{Additional work}
+  Maybe you want to extend the class to include Diagonally Implicit Runge Kutta Methods
+  (DIRK), where the $A$ matrix of the Butcher array satisfies $A_{ij}=0$ if $j<i$, but
+  $A_{ii}$ may be different from $0$.
+  \smallskip
+  
+  In this case, at each stage we need to solve a non-linear system. Try to investigate the changes needed to implement a DIRK starting from the already implemented RKF solution.
+  \smallskip
+  
+  A possible implementation is in \texttt{Examples/src/RKFSolver/}.
+\end{frame}
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
