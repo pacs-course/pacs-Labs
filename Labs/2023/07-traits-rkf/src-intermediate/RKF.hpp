@@ -25,7 +25,7 @@ inline static auto norm(const VariableType& x) {
 /// Struct holding the results of the RKF solver.
 template <ScalarOrVector VariableType, Scalar TimeType>
 struct RKFResult {
-  using ErrorType = decltype(norm(VariableType{}));
+  using ErrorType = std::invoke_result_t<decltype(norm<VariableType>), VariableType>;
   /// Time steps.
   std::vector<TimeType> time;
 
@@ -206,8 +206,8 @@ std::pair<VariableType, VariableType> RKF<ButcherType, VariableType, TimeType>::
   VariableType v1 = y;
   VariableType v2 = y;
   for (unsigned i = 0; i < n_stages; ++i) {
-    v1 += (h * b1[i]) * K[i];
-    v2 += (h * b2[i]) * K[i];
+    v1 += h * b1[i] * K[i];
+    v2 += h * b2[i] * K[i];
   }
 
   return std::make_pair(v1, v2);
