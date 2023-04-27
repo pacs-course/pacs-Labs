@@ -6,7 +6,7 @@ For the laboratories of this course you will need two things:
 
 ## 1. What are mk modules?
 
-[mk modules](https://github.com/elauksap/mk) bundle a set of scientific libraries compiled under the same toolchain. Once installed, they provide the command module, that has several subcommands:
+[mk modules](https://github.com/pcafrica/mk) bundle a set of scientific libraries compiled under the same toolchain. Once installed, they provide the command module, that has several subcommands:
 
 ```
 module load <module name> 
@@ -38,7 +38,7 @@ As a first step, install the [Docker container environment](https://www.docker.c
 From a terminal with admin privileges, run the command
 
 ```bash
-docker pull elauksap/hpc_courses
+docker pull pcafrica/mk
 ```
 
 The image is just a snapshot of the state of a Ubuntu distro, it is like a saving point from where you want to start. You can check your images with `docker image ls`.
@@ -47,7 +47,7 @@ The image is just a snapshot of the state of a Ubuntu distro, it is like a savin
 To use your image you need to create a Docker container. To make a parallel with virtual machines, the Docker image is like the .iso of the OS, but then you have to install it. We want to create a container with the image we have just downloaded, give it a name (`--name pacs-env`) to remember its function and share a folder with the host so that we can exchange file easily (`-v /path/to/host/folder:/home/jellyfish/shared-folder`). The complete command is:
 
 ```bash
-docker run --name pacs-env -v /path/to/host/folder:/home/jellyfish/shared-folder -it -d elauksap/hpc_courses
+docker run --name pacs-env -v /path/to/host/folder:/home/jellyfish/shared-folder -it -d pcafrica/mk
 ```
 
 **WARNING:** to avoid problems `/path/to/host/folder` should not contain white spaces or special characters. For instance you can make your shared folder with the command `mkdir shared-folder` and than `/path/to/host/folder` would be `/home/user/shared-folder` (use global path starting with `/`, avoid using `~`).
@@ -143,9 +143,9 @@ After you're done, you can proceed to Section 2.3.
 
 ### 2.4 Download and install the modules
 
-1. Download `mk-2022.0-full.tar.gz` from [this link](https://github.com/elauksap/mk/releases/download/v2022.0/mk-2022.0-full.tar.gz). E.g.
+1. Download `mk-2022.0-full.tar.gz` from [this link](https://github.com/pcafrica/mk/releases/download/v2022.0/mk-2022.0-full.tar.gz). E.g.
 ```bash
-wget https://github.com/elauksap/mk/releases/download/v2022.0/mk-2022.0-full.tar.gz
+wget https://github.com/pcafrica/mk/releases/download/v2022.0/mk-2022.0-full.tar.gz
 ```
 2. `sudo tar xvzf mk-2022.0-full.tar.gz -C /` (~ 4.5GB required).
 
