@@ -1,16 +1,60 @@
 #include "matrix.hpp"
 
+#include <Eigen/Dense>
 #include <algorithm>
 #include <cassert>
 
 matrix matrix::transpose() const {
-  std::cout << "WARNING: transpose not implemented" << std::endl;
-  return matrix(0);
+  matrix result(get_cols(), get_rows());
+
+  for (size_t i = 0; i < result.get_rows(); ++i) {
+    for (size_t j = 0; j < result.get_cols(); ++j) {
+      result(i, j) = value(j, i);
+    }
+  }
+
+  return result;
 }
 
 matrix operator*(const matrix &A, const matrix &B) {
-  std::cout << "WARNING: operator* not implemented" << std::endl;
-  return matrix(0);
+  assert(A.get_cols() == B.get_rows());
+
+  matrix result(A.get_rows(), B.get_cols());
+
+  for (size_t i = 0; i < result.get_rows(); ++i)
+    for (size_t j = 0; j < result.get_cols(); ++j)
+      for (size_t k = 0; k < A.get_cols(); ++k)
+        result(i, j) += A(i, k) * B(k, j);
+
+  return result;
+}
+
+matrix matrix::mmult_transpose_trick(const matrix &other) {
+  assert(get_cols() == other.get_rows());
+
+  matrix result(get_rows(), other.get_cols());
+
+  matrix tmp = transpose();
+
+  for (size_t i = 0; i < result.get_rows(); ++i)
+    for (size_t j = 0; j < result.get_cols(); ++j)
+      for (size_t k = 0; k < get_cols(); ++k)
+        result(i, j) += tmp(k, i) * other(k, j);
+
+  return result;
+}
+
+matrix matrix::mmult_eigen(const matrix &other) {
+  assert(get_cols() == other.get_rows());
+  matrix result(get_rows(), other.get_cols());
+
+  Eigen::Map<const Eigen::MatrixXd> eigen_A(get_data(), get_rows(), get_cols());
+  Eigen::Map<const Eigen::MatrixXd> eigen_B(other.get_data(), other.get_rows(),
+                                            other.get_cols());
+  Eigen::Map<Eigen::MatrixXd> eigen_result(result.get_data(), result.get_rows(),
+                                           result.get_cols());
+  eigen_result = eigen_A * eigen_B;
+  return result;
 }
 
 void matrix::solve(matrix &rhs) {

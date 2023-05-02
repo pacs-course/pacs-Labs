@@ -33,6 +33,9 @@ class matrix {
   /// transposed matrix : B = A'
   matrix transpose() const;
 
+  matrix mmult_transpose_trick(const matrix &other);
+  matrix mmult_eigen(const matrix &other);
+
   void solve(matrix &rhs);
 
   void factorize();
