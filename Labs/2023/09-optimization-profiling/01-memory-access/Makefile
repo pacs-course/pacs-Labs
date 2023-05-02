@@ -2,7 +2,7 @@ CXX      ?= g++
 CXXFLAGS ?= -std=c++17
 CPPFLAGS ?= -O3 -Wall
 
-EXEC     = 01-base
+EXEC     = main
 LDFLAGS ?=
 LIBS    ?=
 
