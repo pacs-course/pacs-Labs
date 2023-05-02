@@ -56,7 +56,7 @@ struct Struct1Pack4 {
 
 /// Layout:
 /// | i | i | i |    i    |
-/// | c | s | s | padding |
+/// | s | s | c | padding |
 struct Struct2 {
   int i;        // 4 bytes.
   short int s;  // 2 bytes.

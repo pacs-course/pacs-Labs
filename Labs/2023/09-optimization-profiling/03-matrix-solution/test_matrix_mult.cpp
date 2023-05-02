@@ -50,6 +50,15 @@ int main(int argc, char **argv) {
     std::cout << "Multiply (eigen) time: " << dt << " [ms] " << std::endl;
   }
 
+  // test matrix multiplication done by openblas
+  {
+    const auto t0 = high_resolution_clock::now();
+    matrix C = A.mmult_openblas(B);
+    const auto t1 = high_resolution_clock::now();
+    const auto dt = duration_cast<milliseconds>(t1 - t0).count();
+    std::cout << "Multiply (openblas) time: " << dt << " [ms] " << std::endl;
+  }
+
   // test time to transpose matrix
   {
     const auto t0 = high_resolution_clock::now();

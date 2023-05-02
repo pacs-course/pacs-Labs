@@ -1,5 +1,7 @@
 #include "matrix.hpp"
 
+#include <cblas.h>
+
 #include <Eigen/Dense>
 #include <algorithm>
 #include <cassert>
@@ -54,6 +56,28 @@ matrix matrix::mmult_eigen(const matrix &other) {
   Eigen::Map<Eigen::MatrixXd> eigen_result(result.get_data(), result.get_rows(),
                                            result.get_cols());
   eigen_result = eigen_A * eigen_B;
+  return result;
+}
+
+matrix matrix::mmult_openblas(const matrix &other) {
+  assert(get_cols() == other.get_rows());
+  matrix result(get_rows(), other.get_cols());
+  cblas_dgemm(
+    CblasColMajor,     // order
+    CblasNoTrans,      // transpose A
+    CblasNoTrans,      // transpose B
+    get_rows(),        // Number of rows in matrices A and C. 
+    other.get_cols(),  // Number of columns in matrices B and C.
+    get_cols(),        // Number of columns in matrix A; number of rows in matrix B.
+    1.0,               // Scaling factor for the product of matrices A and B.
+    get_data(),        // A
+    get_rows(),        // The size of the first dimension of matrix A
+    other.get_data(),  // B
+    other.get_rows(),  // The size of the first dimension of matrix B
+    1.0,               // Scaling factor for matrix C.
+    result.get_data(), // C
+    result.get_rows()  // The size of the first dimension of matrix C
+  );
   return result;
 }
 

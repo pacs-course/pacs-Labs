@@ -16,9 +16,10 @@ int lookup(const size_t &index) {
 
 int lookup_static(const size_t &index) {
   // Generate an arbitrary dataset.
-  static auto data = std::vector<int>(vec_size);
+  static std::vector<int> data;
 
   if (data.empty()) {
+    data.resize(vec_size);
     std::iota(data.begin(), data.end(), 0);
   }
 

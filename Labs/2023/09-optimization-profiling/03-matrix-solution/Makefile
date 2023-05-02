@@ -18,8 +18,8 @@ else
 	endif
 endif
 
-CPPFLAGS ?= $(CPPFLAGS_EXTRA) -Wall -pedantic -I. -I${mkEigenInc}
-LDLIBS   ?= 
+CPPFLAGS ?= $(CPPFLAGS_EXTRA) -Wall -pedantic -I. -I${mkEigenInc} -I${mkOpenblasInc}
+LDLIBS   ?= -L${mkOpenblasLib} -lopenblas
 LINK.o := $(LINK.cc) # Use C++ linker.
 
 DEPEND = make.dep
