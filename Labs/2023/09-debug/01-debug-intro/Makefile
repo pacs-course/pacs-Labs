@@ -7,7 +7,8 @@ LIBS    ?=
 
 EXEC = assert1 assert2 debug_macro defensive \
        pause print student1 student2 \
-       undefined_behaviour undefined_behaviour2
+       undefined_behaviour undefined_behaviour2 \
+	   range_check
 
 DEBUG_SUFFIX = debug
 RELEASE_SUFFIX = release
@@ -17,7 +18,7 @@ RELEASE_SUFFIX = release
 all: $(EXEC)
 
 $(EXEC): %: %.cpp
-	$(CXX) $(CPPFLAGS) -O0 $(CXXFLAGS) $(LDFLAGS) $< $(LIBS) -o $@.$(DEBUG_SUFFIX)
+	$(CXX) $(CPPFLAGS) -O0 -g $(CXXFLAGS) $(LDFLAGS) $< $(LIBS) -o $@.$(DEBUG_SUFFIX)
 	$(CXX) $(CPPFLAGS) -O3 -DNDEBUG $(CXXFLAGS) $(LDFLAGS) $< $(LIBS) -o $@.$(RELEASE_SUFFIX)
 	
 

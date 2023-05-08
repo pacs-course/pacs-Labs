@@ -233,6 +233,18 @@ std::cout << "Hit enter to continue." << std::endl;
 std::cin.get();
 ```
 
+### Range check
+Address Sanitizer is a tool developed by Google detect memory access error such as use-after-free and memory leaks. It is built into GCC versions >= 4.8 and can be used on both C and C++ codes. Address Sanitizer uses runtime instrumentation to track memory allocations, which mean you must build your code with Address Sanitizer to take advantage of it's features.
+
+There is extensive documentation on the AddressSanitizer [Github Wiki](https://github.com/google/sanitizers/wiki/AddressSanitizer).
+
+The `-fsanitize=address` flag is used to tell the compiler to add AddressSanitizer. t's helpful to compile the code with debug symbols. AddressSanitizer will print line numbers if debug symbols are present. To do this, add the `-g` flag. Additionally, the `-fno-omit-frame-pointer` flag may be helpful if you find that your stack traces do not look quite correct.
+
+**WARNING**: This tool is not compatible with Valgrind. 
+
+(Credits to: [Ohio Supercomputer Center | HOWTO: Use Address Sanitizer](https://www.osc.edu/resources/getting_started/howto/howto_use_address_sanitizer))
+
+
 ## Command line debugger -- GDB
 
 Command line debuggers such as GDB and LLDB come without graphical

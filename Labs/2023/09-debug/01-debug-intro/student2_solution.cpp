@@ -14,7 +14,8 @@ public:
   Name(const std::string givenName, const std::string familyName)
     : givenName_(givenName)
     , familyName_(familyName)
-  {}
+  {
+  }
 
   ~Name()
   {}
@@ -41,12 +42,13 @@ public:
     : name_(new Name(givenName, familyName))
     , studentID_(studentID)
   {
-    name_ = nullptr;
+    // name_ = nullptr; ///< Bug!
   }
 
   /// Destructor
   ~Student()
   {
+    delete name_; ///< Missing!
   }
 
   /// Return a copy of the student's ID number
