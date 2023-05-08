@@ -89,8 +89,8 @@ will output the file name and line number.  See [`print.cpp`](print.cpp).
 
 It is often handy to use a preprocessor macro for debugging statements.  This can
 alleviate some of the burden of always writing `std::cout << x << std::endl;`.
-Let's look at the simple example in [`debug_macro.hpp`](debug_macro.hpp). This code defines a "macro" called `BUGPRINT`. If the identifier `PRINT_DEBUG`
-is defined, the preprocessor will replace each instance of `BUGPRINT(x)` in
+Let's look at the simple example in [`debug_macro.hpp`](debug_macro.hpp). This code defines a "macro" called `BUGPRINT`. If the identifier `NDEBUG`
+is not defined, the preprocessor will replace each instance of `BUGPRINT(x)` in
 the code with the do-loop in the macro; note that we use a do-while loop such that a call to `BUGPRINT` can be executed as part of `if-else` statements and other control flow (see [here](https://stackoverflow.com/a/1067238)). See [`debug_macro.cpp`](debug_macro.cpp).
 
 Under normal compilation, the call to `BUGPRINT` has no effect:
@@ -102,11 +102,11 @@ a = 5
 b = 6
 ```
 
-We add a compiler flag `-DPRINT_DEBUG` to define the identifier
+We remove a compiler flag `-DNDEBUG` to define the identifier
 `PRINT_DEBUG` and thus enable preprocessor code replacement:
 
 ```sh
-$ g++ -DPRINT_DEBUG debug_macro.cpp -o debug_macro
+$ g++ debug_macro.cpp -o debug_macro
 $ ./debug_macro
 debug_macro.cpp:14: a * b -> 30
 a = 5

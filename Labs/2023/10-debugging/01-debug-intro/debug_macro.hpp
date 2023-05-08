@@ -1,5 +1,5 @@
 // Use screaming letters to define macro!
-#ifdef PRINT_DEBUG
+#ifndef NDEBUG
 #  define BUGPRINT(x)                                     \
     do                                                    \
       {                                                   \

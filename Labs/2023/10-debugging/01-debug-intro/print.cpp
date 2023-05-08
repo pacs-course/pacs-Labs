@@ -3,8 +3,8 @@
 int
 main(int argc, char **argv)
 {
-// Compile with `-DMY_DEBUG` to enable printing debug output
-#ifdef MY_DEBUG
+// Compile with `-DNDEBUG` to disable printing debug output
+#ifndef NDEBUG
   std::cout << "__FILE__: " << __FILE__ << std::endl;
   std::cout << "__LINE__: " << __LINE__ << std::endl;
 #endif
