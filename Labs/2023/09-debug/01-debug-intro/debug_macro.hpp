@@ -3,8 +3,9 @@
 #  define BUGPRINT(x)                                     \
     do                                                    \
       {                                                   \
-        std::cerr << __FILE__ << ":" << __LINE__ << ": "; \
-        std::cerr << #x << " -> " << (x) << std::endl;    \
+        std::cerr << __FILE__ << ":"  << __func__ << ":"  \
+                  << __LINE__ << ": " << #x << " -> "     \
+                  << (x) << std::endl;                    \
       }                                                   \
     while (0)
 #else
