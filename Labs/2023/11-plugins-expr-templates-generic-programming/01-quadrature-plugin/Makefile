@@ -1,10 +1,10 @@
 CXX      ?= g++
-CXXFLAGS ?= -std=c++17
+CXXFLAGS ?= -std=c++20
 CPPFLAGS ?= -O3 -Wall -pedantic -I. -fPIC
 LDFLAGS  ?= -L. -Wl,-rpath=$(PWD)
 LINK.o := $(LINK.cc) # Use C++ linker.
 
-EXEC = main_quadrature
+EXEC = main
 SRCS = $(wildcard *.cpp)
 LIBS = adaptive_quadrature.so midpoint.so trapezoidal.so
 

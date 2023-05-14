@@ -3,10 +3,8 @@
 
 #include <functional>
 
-extern "C"
-{
-  double
-  integrate(std::function<double(double)>, double, double);
+extern "C" {
+double integrate(const std::function<double(double)> &, double, double);
 }
 
 #endif
