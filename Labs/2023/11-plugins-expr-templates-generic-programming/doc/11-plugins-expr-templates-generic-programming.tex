@@ -1,4 +1,4 @@
-\documentclass[10pt]{beamer}
+\documentclass[10pt,aspectratio=169]{beamer}
 \usetheme{default}
 \setbeamercovered{invisible}
 \setbeamertemplate{navigation symbols}{}
@@ -36,23 +36,65 @@
   lineskip=0ex, %  frame=single
 }
 
-\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
-\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
-
 \begin{document}
     \title{Plugins \protect\\ Expression templates \protect\\ Generic programming}
-    \author{Pasquale Claudio Africa}
-    \date{13/05/2021}
+    \author{Matteo Caldana}
+    \date{18/05/2023}
 
 \begin{frame}[plain, noframenumbering]
     \maketitle
 \end{frame}
 
+\begin{frame}[fragile]{Exercise 1: quadrature rules with plugins}
+    Let us consider the following simple example compiled with \texttt{g++ 01-main.cpp -o main}
+    \lstinputlisting{./examples/01-main.cpp}
+    \vfill
+    We can use the \texttt{nm} command to show information about symbols in the executable we obtained (it works also with object files, and object-file libraries). In particular, by running the command \texttt{nm -a main | grep func} we will obtain something like:
+    
+\begin{verbatim}
+00000000004010f6 T _Z4funcv
+\end{verbatim}
+
+In order to support overloading, the C++ compiler has mangled the name of the function \texttt{func} with the type of the input parameters (v for \texttt{void}).
+
+\end{frame}
+
+\begin{frame}[fragile]{Exercise 1: quadrature rules with plugins}
+    This is more evident when we consider an example with function overloading
+    \lstinputlisting{./examples/02-main.cpp}
+    \vfill
+    By using again the \texttt{nm} we will obtain something like:
+    
+\begin{verbatim}
+00000000004010fd T _Z4funci
+0000000000401109 T _Z4funcid
+00000000004010f6 T _Z4funcv
+\end{verbatim}
+
+We have three different symbols, one for each overload. However, notice how only the parameter types (and not the return type) affect the name mangling. Indeed, you can't overload methods based on return type.
+
+\end{frame}
+    
+\begin{frame}[fragile]{Exercise 1: quadrature rules with plugins}
+    What happens in C where there is no function overload? We can test it by using the \texttt{extern "C"} directive.
+    \lstinputlisting{./examples/03-main.cpp}
+    \vfill
+	Now, the symbols defined in the executable concerting the functions are 
+\begin{verbatim}
+00000000004010f6 T _Z4funcv
+00000000004010fd T another_func
+\end{verbatim}
+Notice how \texttt{another\_func} has no name mangling. This feature will come in handy when dynamically loading plug-ins since we do not want to read a mangled name from the shared library.
+\end{frame}
+
+
+    
+
 \begin{frame}{Exercise 1: quadrature rules with plugins}
 \begin{itemize}
 \item Implement a code that enables the user to compute the integral of a scalar function by selecting the quadrature rule as the name of a dynamically loadable object;
 \item The dynamically loadable object should define a function with the following signature:
-\texttt{double integrate(std::function<double (double)>, double a, double b)}.
+\texttt{double integrate(const std::function<double (double)> \&, double a, double b)}.
 \item Implement plugins for midpoint, trapezoidal and Simpson's rule.
 \item Implement a plugin for quadrature with adaptive refinement.
 \end{itemize}
@@ -66,6 +108,8 @@ The starting code provided implements a custom \texttt{MyVector} class.
 \item Given two vectors $\mathbf{x}$ and $\mathbf{y}$, implement the sum and the multiplication operators to compute the quantity $2\mathbf{x} + \mathbf{y}^2$, where the operations are intended component-wise.
 \item Provide an expression template implementation and compare the computational costs with respect to a non-template implementation.
 \end{itemize}
+\vfill
+{\small See also: \url{https://devtut.github.io/cpp/expression-templates.html} and \url{https://en.wikipedia.org/wiki/Expression_templates}.}
 \end{frame}
 
 \begin{frame}{Exercise 3: 1D interpolator using generic programming}
