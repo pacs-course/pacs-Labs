@@ -93,7 +93,7 @@ interp1D(RAIterator const &  begin,
     {
       RAIterator c = std::next(a, dis / 2); // midpoint
 
-      if (comp(keyVal, extractKey(*c))) // keyVal on the left of c
+      if (comp(keyVal, extractKey(c))) // keyVal on the left of c
         b = c;
       else // keyVal on the right of c or on c
         a = c;
@@ -112,11 +112,11 @@ interp1D(RAIterator const &  begin,
       std::advance(a, -1); // here I need bi-directionality!
     }
 
-  const auto valueLeft = extractValue(*a);
-  const Key  keyLeft   = extractKey(*a);
+  const auto valueLeft = extractValue(a);
+  const Key  keyLeft   = extractKey(a);
 
-  const auto valueRight = extractValue(*b);
-  const Key  keyRight   = extractKey(*b);
+  const auto valueRight = extractValue(b);
+  const Key  keyRight   = extractKey(b);
 
   const auto len = keyRight - keyLeft;
 

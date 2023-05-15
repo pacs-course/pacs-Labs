@@ -85,7 +85,7 @@ interp1D(RAIterator const &  begin,
     throw std::runtime_error(
       "Interp1D: I need at least 2 points to interpolate!");
 
-  return extractValue(*begin);
+  return extractValue(begin);
 }
 
 #endif /* EXAMPLES_SRC_INTERP1D_INTERP1D_HPP_ */
