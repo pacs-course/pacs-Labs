@@ -1,6 +1,6 @@
 CXX      ?= g++
 CXXFLAGS ?= -std=c++17
-CPPFLAGS ?= -O3 -Wall -pedantic -I. -I${mkEigenInc}
+CPPFLAGS ?= -O3 -Wall -pedantic -I.
 LDLIBS   ?= 
 LINK.o := $(LINK.cc) # Use C++ linker.
 

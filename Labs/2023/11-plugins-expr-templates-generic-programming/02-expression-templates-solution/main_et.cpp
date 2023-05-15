@@ -9,17 +9,17 @@ class MyVector
 public:
   // MyVector with initial size.
   MyVector(const size_t &n)
-    : cont(n)
+    : m_data(n)
   {}
 
   // MyVector with initial size and value.
   MyVector(const size_t &n, const double &initial_value)
-    : cont(n, initial_value)
+    : m_data(n, initial_value)
   {}
 
   // Constructor for underlying container.
   MyVector(const Container &other)
-    : cont(other)
+    : m_data(other)
   {}
 
   // Assignment operator for MyVector of different type.
@@ -29,8 +29,8 @@ public:
   {
     assert(size() == other.size());
 
-    for (size_t i = 0; i < cont.size(); ++i)
-      cont[i] = other[i];
+    for (size_t i = 0; i < m_data.size(); ++i)
+      m_data[i] = other[i];
 
     return (*this);
   }
@@ -38,35 +38,35 @@ public:
   size_t
   size() const
   {
-    return cont.size();
+    return m_data.size();
   }
 
   T
   operator[](const size_t &i) const
   {
-    return cont[i];
+    return m_data[i];
   }
 
   T &
   operator[](const size_t &i)
   {
-    return cont[i];
+    return m_data[i];
   }
 
   const Container &
   data() const
   {
-    return cont;
+    return m_data;
   }
 
   Container &
   data()
   {
-    return cont;
+    return m_data;
   }
 
 private:
-  Container cont;
+  Container m_data;
 };
 
 // Element-wise sum.
@@ -75,8 +75,8 @@ class MyVectorAdd
 {
 public:
   MyVectorAdd(const Op1 &a, const Op2 &b)
-    : op1(a)
-    , op2(b)
+    : m_op1(a)
+    , m_op2(b)
   {
     assert(a.size() == b.size());
   }
@@ -84,28 +84,32 @@ public:
   T
   operator[](const size_t &i) const
   {
-    return op1[i] + op2[i];
+    return m_op1[i] + m_op2[i];
   }
 
   size_t
   size() const
   {
-    return op1.size();
+    return m_op1.size();
   }
 
 private:
-  const Op1 &op1;
-  const Op2 &op2;
+  const Op1 &m_op1;
+  const Op2 &m_op2;
 };
 
 // Element-wise product.
+// One of the drawbacks of this implemenation is that there is
+// a lot of boilerplate and repeated code between `Add` and `Mul`
+// Actually we could do better, see for instance 
+// https://devtut.github.io/cpp/expression-templates.html
 template <class T, class Op1, class Op2>
 class MyVectorMul
 {
 public:
   MyVectorMul(const Op1 &a, const Op2 &b)
-    : op1(a)
-    , op2(b)
+    : m_op1(a)
+    , m_op2(b)
   {
     assert(a.size() == b.size());
   }
@@ -113,18 +117,18 @@ public:
   T
   operator[](const size_t &i) const
   {
-    return op1[i] * op2[i];
+    return m_op1[i] * m_op2[i];
   }
 
   size_t
   size() const
   {
-    return op1.size();
+    return m_op1.size();
   }
 
 private:
-  const Op1 &op1;
-  const Op2 &op2;
+  const Op1 &m_op1;
+  const Op2 &m_op2;
 };
 
 // Function template for the sum operator.

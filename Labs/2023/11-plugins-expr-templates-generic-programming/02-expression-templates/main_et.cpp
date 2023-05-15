@@ -8,17 +8,17 @@ class MyVector
 public:
   // MyVector with initial size.
   MyVector(const size_t &n)
-    : cont(n)
+    : m_data(n)
   {}
 
   // MyVector with initial size and value.
   MyVector(const size_t &n, const double &initial_value)
-    : cont(n, initial_value)
+    : m_data(n, initial_value)
   {}
 
   // Constructor for underlying container.
   MyVector(const Container &other)
-    : cont(other)
+    : m_data(other)
   {}
 
   // Assignment operator for MyVector of different type.
@@ -28,8 +28,8 @@ public:
   {
     assert(size() == other.size());
 
-    for (size_t i = 0; i < cont.size(); ++i)
-      cont[i] = other[i];
+    for (size_t i = 0; i < m_data.size(); ++i)
+      m_data[i] = other[i];
 
     return (*this);
   }
@@ -37,35 +37,35 @@ public:
   size_t
   size() const
   {
-    return cont.size();
+    return m_data.size();
   }
 
   T
   operator[](const size_t &i) const
   {
-    return cont[i];
+    return m_data[i];
   }
 
   T &
   operator[](const size_t &i)
   {
-    return cont[i];
+    return m_data[i];
   }
 
   const Container &
   data() const
   {
-    return cont;
+    return m_data;
   }
 
   Container &
   data()
   {
-    return cont;
+    return m_data;
   }
 
 private:
-  Container cont;
+  Container m_data;
 };
 
 // A program that evaluates (x + x + y * y).
