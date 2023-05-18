@@ -91,7 +91,10 @@ interp1D(RAIterator const &  begin,
   // bisection
   for (auto dis = std::distance(a, b); dis > 1;)
     {
-      RAIterator c = std::next(a, dis / 2); // midpoint
+      // compute midpoint
+      // warning: computing it as c = (a + b) / 2 may lead to overflow
+      // it is better to do instead c = a + (b - a) / 2 = a + distance / 2
+      RAIterator c = std::next(a, dis / 2);
 
       if (comp(keyVal, extractKey(c))) // keyVal on the left of c
         b = c;
@@ -111,6 +114,21 @@ interp1D(RAIterator const &  begin,
       b = a;
       std::advance(a, -1); // here I need bi-directionality!
     }
+
+
+  //// Using the std library we could do this in two lines:
+  //// we use std::lower_bound to find with binary search the
+  //// iterator pointing to the first element in the range [begin, end)
+  //// that does not satisfy element < keyVal (i.e. keyVal <= element)
+  // const auto b = std::lower_bound(
+  //   std::next(begin),
+  //   std::next(end, - 1),
+  //   keyVal,
+  //   [&comp, &extractKey](const auto &elem, const Key &to_find){
+  //     return comp(extractKey(&elem), to_find);
+  //   }
+  // );
+  // const auto a = std::next(b, -1);
 
   const auto valueLeft = extractValue(a);
   const Key  keyLeft   = extractKey(a);
