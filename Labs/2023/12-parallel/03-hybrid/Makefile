@@ -5,7 +5,7 @@ CPPFLAGS ?= -fopenmp -O3 -Wall -pedantic
 LDFLAGS ?=
 LIBS    ?=
 
-EXEC = 01-pi 02-matrix_vector_product
+EXEC = 01-hello-world 02-pi 03-matrix_vector_product
 
 .PHONY = all $(EXEC) clean distclean $(DEPEND)
 
