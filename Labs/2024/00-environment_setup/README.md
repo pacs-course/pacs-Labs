@@ -47,7 +47,7 @@ The image is just a snapshot of the state of a Ubuntu distro, it is like a savin
 To use your image you need to create a Docker container. To make a parallel with virtual machines, the Docker image is like the `.iso` of the OS, but then you have to install it. We want to create a container with the image we have just downloaded, give it a name (`--name pacs-env`) to remember its function and share a folder with the host so that we can exchange file easily (`-v /path/to/host/folder:/home/noble/shared-folder`). The complete command is:
 
 ```bash
-docker run --name pacs-env -v /path/to/host/folder:/home/noble/shared-folder -it -d pcafrica/mk
+docker run --name pacs-env -v /path/to/host/folder:/home/noble/shared-folder -it -d albertoartoni1995/mk
 ```
 
 **WARNING:** you have to substitute `/path/to/host/folder` with the actual name of the path on your laptop, for instance `/home/matteo/polimi/pacs23-24/shared-folder`
