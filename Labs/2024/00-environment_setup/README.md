@@ -44,10 +44,10 @@ docker pull albertoartoni1995/mk
 The image is just a snapshot of the state of a Ubuntu distro, it is like a saving point from where you want to start. You can check your images with `docker image ls`.
 
 #### 2.1.4 Use the Docker image 
-To use your image you need to create a Docker container. To make a parallel with virtual machines, the Docker image is like the `.iso` of the OS, but then you have to install it. We want to create a container with the image we have just downloaded, give it a name (`--name pacs-env`) to remember its function and share a folder with the host so that we can exchange file easily (`-v /path/to/host/folder:/home/noble/shared-folder`). The complete command is:
+To use your image you need to create a Docker container. To make a parallel with virtual machines, the Docker image is like the `.iso` of the OS, but then you have to install it. We want to create a container with the image we have just downloaded, give it a name (`--name pacs-env`) to remember its function and share a folder with the host so that we can exchange file easily (`-v /path/to/host/folder:/home/jammy/shared-folder`). The complete command is:
 
 ```bash
-docker run --name pacs-env -v /path/to/host/folder:/home/noble/shared-folder -it -d albertoartoni1995/mk
+docker run --name pacs-env -v /path/to/host/folder:/home/jammy/shared-folder -it -d albertoartoni1995/mk
 ```
 
 **WARNING:** you have to substitute `/path/to/host/folder` with the actual name of the path on your laptop, for instance `/home/matteo/polimi/pacs23-24/shared-folder`
@@ -182,7 +182,7 @@ int main(int argc, char** argv)
 
 2. Open the terminal (on MacOS you must enter in the container, see Section 2.1.5; on Windows it must be the WSL terminal). Check that `Eigen` is loaded with `module list`, if an error appears load the toolchain with `source /u/sw/etc/profile` and then the Eigen module with `module load gcc-glibc eigen`.
 
-3. From inside the terminal move to the folder containing the file `test-installation.cpp` (if you are using Docker go to `/home/noble/shared-folder`, if you are using WSL remember that folder under `C:\` are found under `/mnt/c`). Here some useful commands:
+3. From inside the terminal move to the folder containing the file `test-installation.cpp` (if you are using Docker go to `/home/jammy/shared-folder`, if you are using WSL remember that folder under `C:\` are found under `/mnt/c`). Here some useful commands:
   * `cd` to change directory, E.g. `cd shared-folder`
   * `ls` to list the content of the current working directory
   * `pwd` to show the current working directory
