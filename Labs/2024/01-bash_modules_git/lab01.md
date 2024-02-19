@@ -17,7 +17,7 @@ marp: true
   font-size: 28px;
 }
 </style>
-The requirements for the labs are described in [00-environment_setup/README.md](https://github.com/pacs-course/pacs-examples/tree/master/Labs/2024/00-environment_setup). 
+The requirements for the labs are described in [00-environment_setup/README.md](https://github.com/pacs-course/pacs-Labs/tree/main/Labs/2024/00-environment_setup). 
 
 At the end of the installation process you should have access to a Linux-base distribution with the `mk-modules`.
 
