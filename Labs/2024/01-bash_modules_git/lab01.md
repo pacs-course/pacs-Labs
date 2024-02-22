@@ -77,8 +77,8 @@ The second distinction we make is between:
 ### Examples of types of shell
 - `login interactive shell`: usually after you log into a remote system.
 - `interactive non-login shell`: running a script explictely from the shell.
-- `non-interactive non login shell`: running a command remotely withouth loggin in.
-- `non-interactive login shell`: runs programs after login withouth the use interaction.
+- `non-interactive non login shell`: running a command remotely without loggin in.
+- `non-interactive login shell`: runs programs after login without the user interaction.
 
 More details in [Difference between Login Shell and Non-Login Shell?](https://unix.stackexchange.com/questions/38175/difference-between-login-shell-and-non-login-shell).
 
@@ -158,7 +158,7 @@ The command `source script_file` executes the commands contained in `script_file
 ---
 
 ### Run a script
-To run a script you need to change the access permissions of the file. To make a file executable run
+To run a script you need to change the access permissions of the file. To make a file executable run:
 
 ```bash
 chmod +x script_file
@@ -205,7 +205,7 @@ which command_name
 ---
 
 ### A warning about filenames
-In order to live happily and without worries, **don't** use spaces nor accented characters in filenames! The space character is employed as a separation charachter.
+In order to live happily and without worries, **don't** use spaces nor accented characters in filenames! The space character is employed as a separation character.
 ### Choose a standard practice
 - *snake case*: `my_wonderful_file_name`.
 - *camel case*: `myWonderfulFileName`.
