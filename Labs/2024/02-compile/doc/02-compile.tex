@@ -398,18 +398,15 @@ $ g++ -shared -Wl,-soname,libutility.so utility.o -o libutility.so
 \end{verbatim}
 \end{frame}
 
-
-\section{Exercises}
-\begin{frame}{Code used for the exercise}
-  We employ the code in \texttt{LinearAlgebra/IML\_Eigen} example. \\
-  The code is available \href{https://github.com/pacs-course/pacs-examples/tree/master/Labs/2024/02-compile}{ \textcolor{blue}{here}}.
-\end{frame}
-
 \begin{frame}{Exercise 1: compiler and linker options}
+	
+  The starting code is available \href{https://github.com/pacs-course/pacs-Labs/tree/main/Labs/2024/02-compile/src}{ \textcolor{blue}{here}}.	
   \begin{itemize}
-  \item Compile \texttt{Utilities.cpp} and make it a shared library named \texttt{liblinearalgebra.so}\\[5mm]
+  \item Compile \texttt{Utilities.cpp} and make it a shared library named \texttt{liblinearalgebra.so}
   \item Compile \texttt{test.cpp} and make an executable binary linked against \texttt{liblinearalgebra.so}
   \end{itemize}
+   
+  
 \end{frame}
 
 \begin{frame}{Exercise 2: a simple \texttt{Bash} script to automate repetitive operations}
@@ -452,7 +449,7 @@ The use of \alert{make} helps to automatize this process by defining
   other files according to a well defined rule.  \medskip
 
   The rules are written on a file, usually called {\blue makefile} or
-  {\blue Makefile}, but you can specify another file using the \texttt{-f} option.).  
+  {\blue Makefile}.  
 \end{frame}
 
 \begin{frame}{The basic layout of a makefile}
@@ -1116,7 +1113,7 @@ But for small projects writing your Makefile directly is often simpler.
 
 \section*{Exercises}
 \begin{frame}{Exercise 3: a Makefile}
-  Create a Makefile that works as the \texttt{Bash} script in Exercise 3.
+  Create a Makefile that works as the \texttt{Bash} script in Exercise 2.
 \end{frame}
 
 \end{document}
