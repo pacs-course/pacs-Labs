@@ -11,8 +11,12 @@ int main(int argc, char **argv) {
   const std::string section = "integration/domain/";
 
   const double a = datafile((section + "a").data(), 0.0);
+  const double b = datafile((section + "b").data(), 0.0);
 
-  /* ... */
+  std::cout << "Integration range: \n" << 
+      "a = " << a << "\n" << 
+      "b = " << b << std::endl;
+
 
   return 0;
 }
