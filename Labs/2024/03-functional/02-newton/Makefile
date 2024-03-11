@@ -8,7 +8,7 @@ LDLIBS  ?=
 
 all: $(EXEC)
 
-%.o: %.cpp newton.hpp
+%.o: %.cpp NewtonSolver.hpp
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $<
 
 $(EXEC): %: %.o
