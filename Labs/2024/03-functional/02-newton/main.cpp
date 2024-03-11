@@ -14,8 +14,12 @@ double dfun(const double &x)
 
 int main(int argc, char **argv)
 {
+  const unsigned int max_it = 50;
+  const double tol_res = 1e-8;
+  const double tol_x = 1e-8;
+
   // initialize solver
-  NewtonSolver solver(fun, dfun);
+  NewtonSolver solver(fun, dfun, max_it, tol_res, tol_x);
 
   // run Newton solver with initial condition 0.0 
   solver.solve(0.0);
