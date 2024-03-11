@@ -28,18 +28,8 @@ public:
   double
   operator()(const double &x)
   {
-    double y = 0;
-
     m_var = x;
-
-    try
-      {
-        y = m_parser.Eval();
-      }
-    catch (mu::Parser::exception_type &e)
-      {
-        std::cerr << e.GetMsg() << std::endl;
-      }
+    double y = m_parser.Eval();
     return y;
   };
 

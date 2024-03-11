@@ -1,6 +1,9 @@
-fun = x^3+5*x+3
-prime = 3*x^2+5
-
-n_max_it = 100
-tol_fun  = 1e-14
-tol_x    = 1e-14
+#-------------------------------------------------
+# Newton Options
+#-------------------------------------------------
+[NewtonSolver]
+    max_it = 3
+    tol_res = 1e-8
+    tol_x = 1e-8
+    fun = 'x*x*x + 5*x + 3'
+    dfun = '3*x*x + 5'
