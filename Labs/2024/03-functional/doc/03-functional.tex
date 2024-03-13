@@ -7,9 +7,9 @@
 }
 
 \begin{document}
-    \title{Functional}
-    \author{Matteo Caldana}
-    \date{10/03/2023}
+    \title{Input handling and functions}
+    \author{Alberto Artoni}
+    \date{13/03/2024}
     
 \begin{frame}[plain, noframenumbering]
     \maketitle
@@ -19,39 +19,78 @@
     To complete some points of the following exercises you need to install the utilities in "Examples Utilities" and the "Extras". If the submodules folders (json and muparser) are empty, you forgot the \texttt{--recursive} option when cloning the pacs repo, you can fix it by running \texttt{git submodule update --init} in the root folder of the pacs repo.
 \end{frame}
 
-\begin{frame}{Exercise 1 - Horner algorithm}
-\begin{enumerate}
-\item Implement the \texttt{eval()} and \texttt{eval\_horner()} functions to compute:
-\begin{align*}
-p_\text{eval}(x) &= a_0 + a_1x + a_2x^2 + a_3x^3 + \ldots + a_nx^n, \\
-p_\text{Horner}(x) &= a_0 + x \left(a_1 + x \left(a_2 + x \left(a_3 + \ldots + x\left(a_{n-1} + x \, a_n\right) \ldots \right) \right) \right).
-\end{align*}
-\item Implement an \texttt{evaluate\_poly()} function by manually looping over the input points.
-\item Modify \texttt{evaluate\_poly()} to use \texttt{std::transform}.
-\item Implement an \texttt{evaluate\_poly\_parallel()} that makes use of the parallel execution policies of \texttt{std::transform} (available since \texttt{C++17}).
-\item Convert \texttt{eval} and \texttt{eval\_horner} from function pointers to \texttt{std::function}.
-\item (\textit{Homework}) Let the user choose from a json parameters file the degree of the polynomial and the discretization interval. The \texttt{json} library can be installed by running \texttt{./install\_PACS.sh} from \texttt{\$\{PACS\_ROOT\}/Extras/json}
-\end{enumerate}
 
-\textbf{NB}: the parallel version requires to link against the Intel Threading Building Blocks (\texttt{TBB}) library (preprocessor flags \texttt{-I\$\{mkTbbInc\}}, linker flags \texttt{-L\$\{mkTbbLib\} -ltbb}).
+\begin{frame}{GetPot}
+	GetPot is a header only library. It allows to easily pass arguments from command line and to read parameter files.
+	
+	\medskip
+	Let us see some example...
 \end{frame}
 
-\begin{frame}{Exercise 2 - Newton solver}
-\begin{enumerate}
-\item Implement a \texttt{NewtonSolver} class.
-\item Let algorithm parameters be read from the command line using \texttt{GetPot}.
-\item Write different \texttt{main} files that pass functions and derivatives as:
-\begin{enumerate}
-\item function pointers;
-\item (\textit{Homework}) lambda functions;
-\item \texttt{muParser} functions (the \texttt{muParser} library can be installed by running \texttt{./install\_PACS.sh} from \texttt{\$\{PACS\_ROOT\}/Extras/muParser}).
-\item (\textit{Homework}) Let the user pass the function and the parameters from command line using \texttt{GetPot} and \texttt{muParser}.
-\end{enumerate}
-\item Use the solver to solve the equation
+\begin{frame}{Exercise 1 - Newton solver}
+
+Find the root of the following non linear equation:
 \begin{equation*}
-x^3 + 5 x + 3 = 0.
-\end{equation*}
+	x^3 + 5 x + 3 = 0,
+\end{equation*}	
+by employing the \texttt{NewtonSolver.hpp} library.
+\medskip
+	
+	\begin{enumerate}
+\item Customize the solver by passing the parameters from command line using \texttt{GetPot}. \\
+\item  Write a new \texttt{main} file that pass functions and derivatives as \texttt{muParser} functions. \\
+\item (\textit{Homework}) Write a new \texttt{main} file that pass the function and the parameters from command line using \texttt{GetPot} and \texttt{muParser}.
 \end{enumerate}
+
+\textbf{Note: } Find the \texttt{muParser} library in \texttt{\$\{PACS\_ROOT\}/lib} and the header file in  \texttt{\$\{PACS\_ROOT\}/include}.
+
+\end{frame}
+
+\begin{frame}{Exercise 2 - Horner algorithm}
+	Evaluating high order polynomial can be computationally expensive in terms of floating point operations. \\
+	
+	\medskip
+	
+Given a polynomial $\displaystyle p(x) = \sum_{i=0}^{n} a_i x^i$, instead of directly evaluating all the monomials at $x_0$, we compute the following sequence:
+\begin{equation*} 
+\begin{aligned}
+	b_n &= a_n, \\
+	b_{n-1} &= a_{n-1} + b_n x_0, \\
+	\vdots \\
+	b_{0} &= a_{0} + b_1 x_0.
+\end{aligned}
+\end{equation*}
+
+	The Horner rule exploits the already computed informations to reduce the number of floating point operations.\\
+	
+	\medskip
+	
+	\textbf{Curiosity:} \textit{ Horner's rule is optimal when evaluating scalar polynomials sequentially.}
+\end{frame}
+
+
+\begin{frame}{Exercise 2 - Horner algorithm}
+		
+	\begin{enumerate}
+		\item Implement the \texttt{eval()} function that computes $p(x)$ by evaluating explicitly the monomials: 
+		\begin{equation*}
+		p_\text{eval}(x) = a_0 + a_1x + a_2x^2 + a_3x^3 + \ldots + a_nx^n.
+		\end{equation*}
+		\item Implement \texttt{eval\_horner()} function to compute $p(x)$ with the Horner's rule:
+		\begin{equation*}
+			p_\text{Horner}(x) = a_0 + x \left(a_1 + x \left(a_2 + x \left(a_3 + \ldots + x\left(a_{n-1} + x \, a_n\right) \ldots \right) \right) \right).
+		\end{equation*}
+		\item Implement an \texttt{evaluate\_poly()} function by manually looping over the input points.
+		\item Modify \texttt{evaluate\_poly()} using the function \texttt{std::transform}.
+		\item Implement an \texttt{evaluate\_poly\_parallel()} that makes use of the parallel execution policies of \texttt{std::transform} (available since \texttt{C++17}).
+		\item (\textit{Homework}) Let the user choose from a \texttt{json} parameters file the degree of the polynomial and the discretization interval.
+	\end{enumerate}
+	
+	\textbf{Note}: 
+	\begin{itemize}
+	\item[$\textcolor{blue}\bullet$] the parallel version requires to link against the Intel Threading Building Blocks (\texttt{TBB}) library (preprocessor flags \texttt{-I\$\{mkTbbInc\}}, linker flags \texttt{-L\$\{mkTbbLib\} -ltbb}). \\
+	\item[$\textcolor{blue}\bullet$] Find the \texttt{json} header file in \texttt{\$\{PACS\_ROOT\}/Examples/include}.
+\end{itemize}
 \end{frame}
 
 \end{document}

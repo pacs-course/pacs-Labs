@@ -1,7 +1,0 @@
-{
-    "max_it" : 3,
-    "tol_res" : 1e-8,
-    "tol_x" : 1e-8,
-    "fun" : "x*x*x + 5*x + 3",
-    "dfun" : "3*x*x + 5"
-}
