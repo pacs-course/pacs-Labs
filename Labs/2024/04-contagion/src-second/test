@@ -1,0 +1,24 @@
+/u/sw/toolchains/gcc-glibc/11.2.0/prefix/bin/g++ -std=c++20 -O3 -Wall -pedantic -I. -isystem../../../../Examples/include -isystem -isystem/u/sw/toolchains/gcc-glibc/11.2.0/pkgs/tbb/2021.3.0/include -I../../../../../pacs-examples/Examples/include  -c -o Contagion.o Contagion.cpp
+In file included from Contagion.cpp:1:
+Contagion.hpp: In constructor 'Contagion::Contagion(const string&)':
+Contagion.hpp:28:29: warning: 'Contagion::m_n_recovered' will be initialized after [-Wreorder]
+   28 |   std::vector<unsigned int> m_n_recovered;
+      |                             ^~~~~~~~~~~~~
+Contagion.hpp:26:29: warning:   'std::vector<unsigned int> Contagion::m_n_susceptible' [-Wreorder]
+   26 |   std::vector<unsigned int> m_n_susceptible;
+      |                             ^~~~~~~~~~~~~~~
+Contagion.cpp:12:1: warning:   when initialized here [-Wreorder]
+   12 | Contagion::Contagion(const std::string &filename)
+      | ^~~~~~~~~
+Contagion.cpp: In member function 'void Contagion::output_results() const':
+Contagion.cpp:68:23: warning: pointer to a function used in arithmetic [-Wpointer-arith]
+   68 |         file << time[i] << "," << m_n_susceptible[i] <<  ","
+      |                       ^
+/u/sw/toolchains/gcc-glibc/11.2.0/prefix/bin/g++ -std=c++20 -O3 -Wall -pedantic -I. -isystem../../../../Examples/include -isystem -isystem/u/sw/toolchains/gcc-glibc/11.2.0/pkgs/tbb/2021.3.0/include -I../../../../../pacs-examples/Examples/include  -c -o Parameters.o Parameters.cpp
+/u/sw/toolchains/gcc-glibc/11.2.0/prefix/bin/g++ -std=c++20 -O3 -Wall -pedantic -I. -isystem../../../../Examples/include -isystem -isystem/u/sw/toolchains/gcc-glibc/11.2.0/pkgs/tbb/2021.3.0/include -I../../../../../pacs-examples/Examples/include    main.o Agent.o Contagion.o Parameters.o  -L -L/u/sw/toolchains/gcc-glibc/11.2.0/pkgs/tbb/2021.3.0/lib -lboost_iostreams -lboost_system -lboost_filesystem -ltbb -o main
+/u/sw/toolchains/gcc-glibc/11.2.0/prefix/lib/gcc/x86_64-mk-linux/11.2.0/../../../../x86_64-mk-linux/bin/ld: cannot find -lboost_iostreams
+/u/sw/toolchains/gcc-glibc/11.2.0/prefix/lib/gcc/x86_64-mk-linux/11.2.0/../../../../x86_64-mk-linux/bin/ld: cannot find -lboost_system
+/u/sw/toolchains/gcc-glibc/11.2.0/prefix/lib/gcc/x86_64-mk-linux/11.2.0/../../../../x86_64-mk-linux/bin/ld: cannot find -lboost_filesystem
+/u/sw/toolchains/gcc-glibc/11.2.0/prefix/lib/gcc/x86_64-mk-linux/11.2.0/../../../../x86_64-mk-linux/bin/ld: cannot find -ltbb
+collect2: error: ld returned 1 exit status
+make: *** [<builtin>: main] Error 1

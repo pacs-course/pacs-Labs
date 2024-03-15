@@ -1,0 +1,5 @@
+Agent.o: Agent.cpp Agent.hpp Parameters.hpp
+Contagion.o: Contagion.cpp Contagion.hpp Agent.hpp Parameters.hpp
+Parameters.o: Parameters.cpp \
+ ../../../../../pacs-examples/Examples/include/GetPot Parameters.hpp
+main.o: main.cpp Contagion.hpp Agent.hpp Parameters.hpp
