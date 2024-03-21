@@ -2,12 +2,9 @@
 #define SPARSE_MATRIX_HPP
 
 #include <cassert>
-#include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <map>
-#include <set>
-#include <type_traits>
 #include <vector>
 
 template <class T>
