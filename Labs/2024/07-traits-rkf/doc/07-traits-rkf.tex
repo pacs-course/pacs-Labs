@@ -1,0 +1,159 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+\usetheme{default}
+\setbeamercovered{invisible}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{
+    \flushright{\hfill \insertframenumber{}/\inserttotalframenumber}
+}
+
+\usepackage{listings}
+
+% User-defined colors.
+\definecolor{DarkGreen}{rgb}{0, .5, 0}
+\definecolor{DarkBlue}{rgb}{0, 0, .5}
+\definecolor{DarkRed}{rgb}{.5, 0, 0}
+\definecolor{LightGray}{rgb}{.95, .95, .95}
+\definecolor{White}{rgb}{1.0,1.0,1.0}
+\definecolor{darkblue}{rgb}{0,0,0.9}
+\definecolor{darkred}{rgb}{0.8,0,0}
+\definecolor{darkgreen}{rgb}{0.0,0.85,0}
+
+% Settings for listing class.
+\lstset{
+  language=C++,                        % The default language
+  basicstyle=\small\ttfamily,          % The basic style
+  backgroundcolor=\color{White},       % Set listing background
+  keywordstyle=\color{DarkBlue}\bfseries, % Set keyword style
+  commentstyle=\color{DarkGreen}\itshape, % Set comment style
+  stringstyle=\color{DarkRed}, % Set string constant style
+  extendedchars=true % Allow extended characters
+  breaklines=true,
+  basewidth={0.5em,0.4em},
+  fontadjust=true,
+  linewidth=\textwidth,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  lineskip=0ex, %  frame=single
+}
+
+% changing math font
+\usefonttheme[onlymath]{serif}
+
+
+\begin{document}
+    \title{A Runge-Kutta-Fehlberg solver\protect\\using traits and concepts\protect\\(part I)}
+    \author{Alberto Artoni}
+    \date{19/04/2024}
+
+\begin{frame}[plain, noframenumbering]
+    \maketitle
+\end{frame}
+
+\begin{frame}{Runge Kutta methods}
+Consider an ODE of the form
+\begin{equation*}
+	\frac{\mathrm{d} y}{\mathrm{d} t} = f\ (t, y).
+\end{equation*}
+
+Given the Butcher coefficients $b_i, a_{ij}, c_i$, a generic Runge Kutta method with $p$ steps has the following update rule:
+\begin{equation*}
+u_{n+1} = u_{n} + h_n \sum_{i=1}^p b_i k_i,
+\end{equation*}
+where $h_n = t_{n+1} - t_n$, and where
+$	k_i = f\ (t_n + c_i h_n, \ y_n + h_n\sum_{j=1}^{i-1}a_{ij}k_j).
+$
+\end{frame}
+
+\begin{frame}{Runge Kutta Fehlberg (RK45)}
+	RKF methods try to adaptively choose the step size. The strategy computes a low order $y^*_{n+1}$ approximation and a high order approximation  $y_{n+1}$. \\
+	If the difference between the two approximations is too large, we decrease the step size. \\
+	If the difference between the two step size is too small, we increase the step size.
+	\end{frame}
+	
+\begin{frame}{RKF - The Algorithm}
+	
+	Given the Butcher coefficients $b_i, b_i^*, c_i, a_{ij}$, and by denoting $h_n = t_{n+1} - t_n$, the RKF algorithm reads:
+		
+	\begin{enumerate}
+		\item Compute $k_i = f\left(t_n + c_i h_n, y_n + h_n\sum_{j=1}^{i-1}a_{ij}k_j\right)$.
+		\item Compute the high-order solution \(y_{n+1} = y_{n} + h_n \sum_{i=1}^p b_i k_i\).
+		\item Compute the low-order solution \(y_{n+1}^* = y_{n} + h_n \sum_{i=1}^p b_i^* k_i\).
+		\item Compute the error \(\varepsilon_{n+1} = y_{n+1} - y_{n+1}^* = h_n \sum_{i=1}^p(b_i - b_i^*)k_i\).
+		\item Adapt the step size \(h_{n+1} = \tau_{n} h_{n}\), where \(\tau_{n}\) is a prescribed reduction (\(<1\))/expansion (\(>1\)) factor depending on whether \(\varepsilon_{n+1}\) is larger or smaller than a prescribed tolerance.
+	\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{RKF solver}
+This exercise (a modified version of \texttt{Examples/src/RKFSolver}) is about a set of tools that implements embedded Runge-Kutta-Fehlberg (explicit) methods to solve non-linear scalar and vector Ordinary Differential Equations, based on the \texttt{Eigen} library.
+\end{frame}
+
+\begin{frame}{Exercise: RKF solver}
+The code structure is the following:
+\begin{itemize}
+\item \texttt{ButcherRKF} contains the definition of the Butcher tableaux for some common RKF methods.
+\item \texttt{RKFTraits} defines the basic structure that enables to bind the type of the equation(s) to be solved (\textit{i.e.} scalar or vector).
+\item \texttt{RKFResult} is a data structure containing the output of the RKF solver.
+\item \texttt{RKF} implements a generic RKF solver interface, filling a proper \texttt{RKFResult} object.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exercise: RKF solver}
+Starting from the provided solution sketch:
+\begin{enumerate}
+\item Implement the \texttt{concept}(s) defining a scalar and a vector in \texttt{RKFTraits.hpp}.
+\item Implement the \texttt{RKF::RKFstep} method, performing just one timestep of the RKF method.
+\item Implement the \texttt{RKF::solve()} time-advancing method, without error correction.
+\item Use the just implemented solver to solve the model problem and the Van der Pol oscillator problem defined in the \texttt{main.cpp} file.
+\item Include error correction into the solver and compare the results.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Motivations: why do we 
+	employ concepts?}
+	Using \texttt{concepts} allows you to write more expressive and robust code by specifying requirements on template parameters.
+	
+	\begin{itemize}
+		\item Improved Readability: Concepts help make your code more readable by explicitly stating the requirements of template parameters.
+		\item Compile-Time Constraints: Concepts allow you to enforce constraints on template arguments at compile time. 
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{}
+	Test the code to solve following problem:
+	\begin{equation}
+\frac{dy}{dt} = f,
+	\end{equation}
+	where
+	\begin{itemize}
+		\item Source term: $f = -10y$.
+		\item Analytical solution: $y =
+	 \exp(-10t)$
+		\item $t_0 = 0$.
+		\item $t_f = 10$.
+		\item $y_0 = 1$.
+	\end{itemize}
+			
+	For the numerical scheme, use $h_0 = 0.2$ and $\epsilon = 10^{-4}$.
+\end{frame}
+
+
+\begin{frame}{Additional work}
+  Maybe you want to extend the class to include Diagonally Implicit Runge Kutta Methods
+  (DIRK), where the $A$ matrix of the Butcher array satisfies $A_{ij}=0$ if $j<i$, but
+  $A_{ii}$ may be different from $0$.
+  \smallskip
+  
+  In this case, at each stage we need to solve a non-linear system. Try to investigate the changes needed to implement a DIRK starting from the already implemented RKF solution.
+  \smallskip
+  
+  A possible implementation is in \texttt{Examples/src/RKFSolver/}.
+\end{frame}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
