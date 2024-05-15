@@ -1,0 +1,117 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+\usetheme{default}
+\setbeamercovered{invisible}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{
+    \flushright{\hfill \insertframenumber{}/\inserttotalframenumber}
+}
+
+\usepackage{listings}
+
+% User-defined colors.
+\definecolor{DarkGreen}{rgb}{0, .5, 0}
+\definecolor{DarkBlue}{rgb}{0, 0, .5}
+\definecolor{DarkRed}{rgb}{.5, 0, 0}
+\definecolor{LightGray}{rgb}{.95, .95, .95}
+\definecolor{White}{rgb}{1.0,1.0,1.0}
+\definecolor{darkblue}{rgb}{0,0,0.9}
+\definecolor{darkred}{rgb}{0.8,0,0}
+\definecolor{darkgreen}{rgb}{0.0,0.85,0}
+
+% Settings for listing class.
+\lstset{
+  language=C++,                        % The default language
+  basicstyle=\small\ttfamily,          % The basic style
+  backgroundcolor=\color{White},       % Set listing background
+  keywordstyle=\color{DarkBlue}\bfseries, % Set keyword style
+  commentstyle=\color{DarkGreen}\itshape, % Set comment style
+  stringstyle=\color{DarkRed}, % Set string constant style
+  extendedchars=true % Allow extended characters
+  breaklines=true,
+  basewidth={0.5em,0.4em},
+  fontadjust=true,
+  linewidth=\textwidth,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  lineskip=0ex, %  frame=single
+}
+
+\begin{document}
+    \title{Debugging}
+    \author{Beatrice Crippa}
+    \date{10/05/2024}
+
+\begin{frame}[plain, noframenumbering]
+    \maketitle
+\end{frame}
+
+\begin{frame}{Goal: discover and fix issues}
+	\begin{itemize}
+		\item \textbf{Unexpected behaviors}: compilation may not fail if we do something illegal but the results are not what we expected;
+		\item \textbf{Defensive programming:} anticipate mistakes by making the compilation fail when they happen;
+		\item \textbf{Simple debugging techniques:}
+			\begin{itemize}
+				\item Print statements;
+				\item Asserts;
+				\item Pauses;
+				\item Range check with Address Sanitizer;
+			\end{itemize}
+		\item \textbf{Command line debugger (GDB)};
+		\item \textbf{Memory leaks:} Valgrind.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Examples - Debugging}
+These examples are inspired by \url{https://github.com/cme212/course}
+and show basic techniques for debugging as well as an introduction to \texttt{gdb}.
+
+See also \href{https://gjbex.github.io/DPD-online-book/}{Defensive Programming and Debugging}.
+\vfill
+Some useful readings about \textit{undefined behaviour} in \texttt{C++}:
+\begin{itemize}
+\item \url{https://mohitmv.github.io/blog/Cpp-Undefined-Behaviour-101/}
+\item \url{https://mohitmv.github.io/blog/Shocking-Undefined-Behaviour-In-Action/}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exercise 1 - Debugging with gdb}
+	The program \texttt{student2} in the directory \texttt{01-debug-intro} implements a class \texttt{Student} with two attributes:
+	\begin{itemize}
+		\item Name;
+		\item StudentID.
+	\end{itemize}
+	\vspace{0.3cm}
+	
+	The student's name is an instance of class \texttt{Name}, with two attributes of type \texttt{std::string}:
+	\begin{itemize}
+		\item First name;
+		\item Family name.
+	\end{itemize}
+	\vspace{0.3cm}
+	
+	The program wants to create a pointer to a new student, print the name and studentID and finally delete it. \\[3mm]
+	
+	There is a run-time error leading to segmentation fault. \\[3mm]
+	
+	Using \texttt{gdb} find the issue and fix it.
+\end{frame}
+
+\begin{frame}{Exercise 2 - Debugging (advanced)}
+The program \texttt{integer-list} in the directory \texttt{02-bug} has:
+
+\begin{itemize}
+    \item a compile error;
+    \item a run-time error;
+    \item a memory leak;
+    \item a possible memory leak that is not captured by the \texttt{main}.
+\end{itemize}
+\vspace{0.5cm}
+Find all the issues and fix them. \\[3mm]
+
+Get help by using \texttt{gdb} and \texttt{valgrind}.\\[3mm]
+
+The directory \texttt{02-bug-solution} contains the fixed code,
+please don't look at it before trying to solve the exercise by yourself!
+\end{frame}
+
+\end{document}
