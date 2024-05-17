@@ -1,0 +1,43 @@
+## EMPLOYED NODE IS 39
+## SCALABILITA' MPI
+## running with n mpi cores and 1 threads
+ 1_1: 43.1076 [s]
+ 2_1: 21.5862 [s]
+ 3_1: 14.4038 [s]
+ 6_1: 7.27226 [s]
+12_1: 3.59268 [s]
+24_1: 1.80797 [s]
+48_1: 1.03412 [s]
+
+## SCALABILITA' MPI + 2 threads
+## running with n mpi cores and 2 threads
+ 1_2: 21.5908 [s]
+ 2_2: 10.8948 [s]
+ 3_2: 7.25685 [s]
+ 6_2: 3.59584 [s]
+12_2: 1.81591 [s]
+24_2: 1.02866 [s]
+48_2: 1.19351 [s]
+
+## REPORTING: number of MPI cores. 
+## REST IS FILLED WITH THREADS
+ 1: 1.30968 [s]
+ 2: 1.16924 [s]
+ 3: 1.22301 [s]
+ 6: 1.19204 [s]
+12: 1.096   [s]
+24: 1.12775 [s]
+48: 1.14579 [s]
+96: 1.08645 [s]
+
+## SCALABILITA' MULTITHREADING
+## now employing only threads
+ 1: 43.1108 [s]
+ 2: 21.6366 [s]
+ 3: 14.5174 [s]
+ 6: 7.26925 [s]
+12: 3.72066 [s]
+24: 2.20576 [s]
+48: 1.18971 [s]
+96: 1.41383 [s]
+
