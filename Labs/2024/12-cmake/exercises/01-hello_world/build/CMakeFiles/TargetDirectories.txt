@@ -1,0 +1,3 @@
+/home/alberto/postPhd/Didattica/PACS_2023-2024/pacs/pacs-Labs/Labs/2024/12-cmake/exercises/01-hello_world/build/CMakeFiles/hello_world.dir
+/home/alberto/postPhd/Didattica/PACS_2023-2024/pacs/pacs-Labs/Labs/2024/12-cmake/exercises/01-hello_world/build/CMakeFiles/edit_cache.dir
+/home/alberto/postPhd/Didattica/PACS_2023-2024/pacs/pacs-Labs/Labs/2024/12-cmake/exercises/01-hello_world/build/CMakeFiles/rebuild_cache.dir
