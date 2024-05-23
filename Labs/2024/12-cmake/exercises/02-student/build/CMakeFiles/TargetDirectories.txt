@@ -1,3 +1,0 @@
-/home/alberto/postPhd/Didattica/PACS_2023-2024/pacs/pacs-Labs/Labs/2024/12-cmake/exercises/02-student/build/CMakeFiles/student.dir
-/home/alberto/postPhd/Didattica/PACS_2023-2024/pacs/pacs-Labs/Labs/2024/12-cmake/exercises/02-student/build/CMakeFiles/edit_cache.dir
-/home/alberto/postPhd/Didattica/PACS_2023-2024/pacs/pacs-Labs/Labs/2024/12-cmake/exercises/02-student/build/CMakeFiles/rebuild_cache.dir
