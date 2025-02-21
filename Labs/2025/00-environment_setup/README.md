@@ -30,7 +30,7 @@ mkdir -p /path/to/shared_files_directory
 ```
 podman pull --arch=amd64 docker://lucaformaggia/pacs-examples:latest
 ```
-
+(you can also build by yourself, see [PacsContainer](https://github.com/pacs-course/PacsContainer))   
 ### Run the container
 ```
 podman run -it --name pacs2025 --rm -v /path/to/shared_files_directory:/home/pacs/shared_files docker.io/lucaformaggia/pacs-examples:latest
