@@ -3,7 +3,7 @@ For the laboratories of this course you will need two things:
 
 1. any text editor (VSCode, gedit, nano...)  
 2. a unix/linux-based development environment, such as:  
-   + any linux distribution (e.g. Debian/Ubuntu, RHEL/Fedora, Arch...)  
+   + any linux distribution (e.g. Debian/Ubuntu, RHEL/Fedora, Arch...; see e.g. [linux essentials book](https://www.bibliosearch.polimi.it/permalink/39PMI_INST/1nvvje2/alma9956393108776), available online at PoliMi library website, for a first introduction)  
    + Windows + WSL (official WSL installation guide [here](https://learn.microsoft.com/en-us/windows/wsl/install), if in doubt stick to defaults)    
    + MacOS  
    
