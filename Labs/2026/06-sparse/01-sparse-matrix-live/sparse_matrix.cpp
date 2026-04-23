@@ -33,11 +33,13 @@ operator << (std::ostream & os, sparse_matrix &M)
   os << "matrix = [ ";
   for (size_t i = 0; i < M.size (); ++i)
     if (M[i].size ())
-      for (j=M[i].begin (); j!=M[i].end(); ++i)
+      for (j = M[i].begin (); j != M[i].end (); ++j)
         {
           os << i+1 <<" , " << M.col_idx(j) + 1 << ", ";
-          os << M.col_value (j) << "; " << std::endl;
+          os << M.col_value (j) << ";\n ";
         }
+  os << "]" << std::endl;
+  return os;
 }
 
 void sparse_matrix::operator += (sparse_matrix & rhs) // A+=B
@@ -93,7 +95,6 @@ void sparse_matrix::csr (std::vector <double> &a,
     row_ptr[idr++] = idx; //++idr != idr++
   }
 }
-
 
 
 
