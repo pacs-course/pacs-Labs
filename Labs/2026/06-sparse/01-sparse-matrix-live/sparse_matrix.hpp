@@ -39,9 +39,9 @@ class sparse_matrix : public std::vector <std::map <int, double>>
     inline double
     col_value (const col_iter & j) const {return j -> second;}
     
-    inline const size_t rows () const {return size ();}
+    inline size_t rows () const {return size ();}
     
-    inline const size_t cols () const {return m;}
+    inline size_t cols () const {return m;}
     
     void csr (std::vector <double> &a,
               std::vector <int> &col_ind,
@@ -56,7 +56,6 @@ class sparse_matrix : public std::vector <std::map <int, double>>
     friend std::ostream & // std::cout << A << std::endl 
     operator << (std::ostream & os, sparse_matrix & M);
 };
-
 
 
 
