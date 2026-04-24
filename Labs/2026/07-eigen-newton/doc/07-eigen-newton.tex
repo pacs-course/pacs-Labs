@@ -1,0 +1,86 @@
+\documentclass[10pt]{beamer}
+\usetheme{default}
+\setbeamercovered{invisible}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{
+    \flushright{\hfill \insertframenumber{}/\inserttotalframenumber}
+}
+
+\usepackage{listings}
+
+% User-defined colors.
+\definecolor{DarkGreen}{rgb}{0, .5, 0}
+\definecolor{DarkBlue}{rgb}{0, 0, .5}
+\definecolor{DarkRed}{rgb}{.5, 0, 0}
+\definecolor{LightGray}{rgb}{.95, .95, .95}
+\definecolor{White}{rgb}{1.0,1.0,1.0}
+\definecolor{darkblue}{rgb}{0,0,0.9}
+\definecolor{darkred}{rgb}{0.8,0,0}
+\definecolor{darkgreen}{rgb}{0.0,0.85,0}
+
+% Settings for listing class.
+\lstset{
+  language=C++,                        % The default language
+  basicstyle=\small\ttfamily,          % The basic style
+  backgroundcolor=\color{White},       % Set listing background
+  keywordstyle=\color{DarkBlue}\bfseries, % Set keyword style
+  commentstyle=\color{DarkGreen}\itshape, % Set comment style
+  stringstyle=\color{DarkRed}, % Set string constant style
+  extendedchars=true % Allow extended characters
+  breaklines=true,
+  basewidth={0.5em,0.4em},
+  fontadjust=true,
+  linewidth=\textwidth,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  lineskip=0ex, %  frame=single
+}
+
+\begin{document}
+    \title{A complete Newton solver\protect\\ using \texttt{Eigen}}
+    \author{Paolo Joseph Baioni}
+    \date{\today}
+
+\begin{frame}[plain, noframenumbering]
+    \maketitle
+\end{frame}
+
+\begin{frame}{Newton solver}
+	This example (inspired by \texttt{Examples/src/NewtonSolver}) presents a set of tools implementing Newton methods for non-linear systems, using the \texttt{Eigen} library.
+	
+	The code structure is the following:
+	\begin{itemize}\small
+		\item \texttt{NewtonTraits} defines the common types used by the solver classes, ensuring a uniform interface.
+		\item \texttt{JacobianBase} is an abstract base class representing the action of a Jacobian (or approximate Jacobian).
+		\item \texttt{FullJacobian} uses a user-provided Jacobian matrix.
+		\item \texttt{DiscreteJacobian} approximates the Jacobian by finite differences.
+		\item \texttt{JacobianFactory} returns a concrete object in the \texttt{JacobianBase} family.
+		\item \texttt{Newton} applies the Newton iteration given a non-linear system and a Jacobian object.
+		\item \texttt{NewtonOptions} and \texttt{NewtonResult} collect input parameters and output data.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Exercise}
+	Consider the problem
+	\[
+	\mathbf{f}(x, y) =
+	\begin{bmatrix}
+		(x-1)^2 + 0.1(y - 5)^2 \\
+		1.5 -x - 0.1y
+	\end{bmatrix}
+	=
+	\mathbf{0}.
+	\]
+	
+	Starting from the provided solution sketch:
+	\begin{enumerate}\small
+		\item Implement the \texttt{NewtonTraits} class, defining the common types used by the solver.
+		\item Implement the \texttt{FullJacobian} class (derived from \texttt{JacobianBase}), which, given the full Jacobian matrix, solves the linear system by direct \(LU\) factorization.
+		\item Implement the \texttt{DiscreteJacobian} class (derived from \texttt{JacobianBase}), which approximates the Jacobian by finite differences and solves the resulting linear system by direct \(LU\) factorization.
+		\item Implement a \texttt{JacobianFactory} function returning an instance of \texttt{FullJacobian} or \texttt{DiscreteJacobian}, depending on the selected Jacobian type.
+		\item Solve the problem above using both the full and the discrete approach.
+		\item Extra: generalize the problem type (scalar, vector, ...) with templates, while keeping runtime Jacobian selection.
+	\end{enumerate}
+\end{frame}
+
+\end{document}
