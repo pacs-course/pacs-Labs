@@ -1,0 +1,50 @@
+\usepackage{solarized}
+\usepackage{listings}
+
+
+
+%\setmonofont{FiraMono-Regular.otf}
+%\usepackage{inconsolata}
+\usepackage{fontspec}
+\setmonofont[]{CMU Typewriter Text}
+
+
+\lstset{
+	belowcaptionskip=1\baselineskip,
+	breaklines=true,
+%	frame=L,
+	xleftmargin=\parindent,
+	language=C,
+	showstringspaces=false,
+	basicstyle=\footnotesize\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{sgrey},
+	stringstyle=\color{sred},
+	columns=fullflexible
+}
+
+
+\lstset{
+    % How/what to match
+    sensitive=true,
+    % Border (above and below)
+  %  frame=lines,
+    % Extra margin on line (align with paragraph)
+    xleftmargin=\parindent,
+    % Put extra space under caption
+    belowcaptionskip=1\baselineskip,
+    % Colors
+    backgroundcolor=\color{sbase3},
+  %  basicstyle=\color{sbase00}\ttfamily,
+  % keywordstyle=\color{scyan},
+  %  commentstyle=\color{sbase1},
+  %  stringstyle=\color{sblue},
+  %  numberstyle=\color{sviolet},
+  %   identifierstyle=\color{sbase00},
+    % Break long lines into multiple lines?
+    breaklines=true,
+    % Show a character for spaces?
+    showstringspaces=false,
+    tabsize=2
+}
