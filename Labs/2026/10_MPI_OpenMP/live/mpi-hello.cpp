@@ -43,7 +43,7 @@ int main (int argc, char **argv)
                     recv_counts(mpi_size), recv_start_idx(mpi_size);
   
   
-  if (mpi_rank = 0)
+  if (mpi_rank == 0)
   {
     rows = 10;
     cols = 10;
@@ -56,8 +56,8 @@ int main (int argc, char **argv)
     {
       for (int j = 0; j < cols; ++j)
       {
-        A[i + j*cols] = i + j;
-        std::cout << A[i + j*cols] << " ";
+        A[i * cols + j] = i + j;
+        std::cout << A[i * cols + j] << " ";
        }
      std::cout << "\n";
      }
@@ -134,7 +134,7 @@ int main (int argc, char **argv)
   #pragma omp parallel for shared (local_b)
     for (int i = 0; i < local_rows; ++i)
       for (int j = 0; j < cols; ++j)
-        local_b[i] = local_A[i + cols*j] * x[j];
+        local_b[i] += local_A[i * cols + j] * x[j];
   
   /*
   int MPI_Gatherv(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
