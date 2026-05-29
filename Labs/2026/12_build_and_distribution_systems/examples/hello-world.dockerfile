@@ -1,5 +1,5 @@
-# Start from a basic Ubuntu 16.04 image
-FROM ubuntu:16.04
+# Start from a basic Ubuntu 24.04 image
+FROM ubuntu:24.04
 
 # Add the instruction to install gcc here
 RUN apt-get update -y && \

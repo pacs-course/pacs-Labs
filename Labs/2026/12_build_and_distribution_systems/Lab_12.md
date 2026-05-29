@@ -65,7 +65,7 @@ Examples:
 
 ![w:700 center](img/cineca.png)
 
-[Leonardo](https://www.hpc.cineca.it/systems/hardware/leonardo/) software stack at CINECA.
+[Leonardo](https://www.hpc.cineca.it/systems/hardware/leonardo/) ([top 10 HPC 2025](https://www.top500.org/lists/top500/2025/11/)) software stack at CINECA in 2024.
 
 ---
 ## Trends
@@ -250,7 +250,7 @@ Spack offers a simple "spec" syntax that allows users to specify versions and co
 Clone the repository
 ```bash
 git clone -c feature.manyFiles=true --depth=1 --branch \
-releases/v0.23 https://github.com/spack/spack spack-0.23
+releases/v1.0 https://github.com/spack/spack spack-1.0
 ```
 
 ---
@@ -258,7 +258,7 @@ releases/v0.23 https://github.com/spack/spack spack-0.23
 
 setup the environment
 ```bash
-source spack-0.23/share/spack/setup-env.sh
+source spack-1.0/share/spack/setup-env.sh
 ```
 
 list available packages (slow first time)
@@ -268,8 +268,8 @@ spack list
 
 optional: tune configuration
 ```bash
-find spack-0.23 -iname "config.yaml"
-nano -liST 2 spack-0.23/etc/spack/defaults/config.yaml 
+find spack-1.0 -iname "config.yaml" 2>/dev/null
+nano -liST 2 spack-1.0/etc/spack/defaults/config.yaml 
 ```
 (eg, edit spack-stage, stage, test and cache dirs; see spack.diff)
 
@@ -325,14 +325,16 @@ spack config get compilers
 # Compilers & toolchains
 Check installed packages with `spack find`
 Now you can use that compiler to build new packages, eg
-```
+```bash
 spack install intel-oneapi-tbb%gcc@14.2.0
 ```
 Check again installed packages with `spack find`
 
 Thus, your installation is independent from OS compiler version and more portable and reproducible. 
 Packages compiled with a specific compiler can be found with 
-```spack find %<compiler>@version```
+```bash
+spack find %<compiler>@version
+```
 
 ---
 # Example of application
@@ -361,7 +363,7 @@ Here we refer to `apt info environment-modules`, but they can be installed via s
 sudo apt install environment-modules
 source /etc/profile.d/modules.sh 
 module avail
-source spack-0.23/share/spack/setup-env.sh
+source spack-1.0/share/spack/setup-env.sh
 spack module tcl refresh -y 
 module avail
 module load gcc/14.2.0<...> && module load intel-oneapi-tbb/
