@@ -241,4 +241,5 @@ The three host threads do not imply three GPUs: MPI ranks, host threads, and GPU
 - C++ reference: [`<execution>`](https://en.cppreference.com/cpp/header/execution), [`std::execution::par`](https://en.cppreference.com/cpp/algorithm/execution_policy_tag), [`std::thread`](https://www.cppreference.com/w/cpp/thread/thread.html), [`std::atomic`](https://en.cppreference.com/w/cpp/atomic/atomic), [`std::barrier`](https://en.cppreference.com/w/cpp/thread/barrier.html)
 - P2300: [`std::execution`](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2300r10.html)
 - NVIDIA [`stdexec`](https://github.com/NVIDIA/stdexec) and [documentation](https://nvidia.github.io/stdexec/index.html)
+- David Olsen, Meeting C++ 2022: [Standard Parallelism: We Need On-Ramps](https://meetingcpp.com/mcpp/slides/2022/Olsen-MeetingCpp-Cpp_Std_Parallelism9578.pdf)
 - NVIDIA [`nvc++` standard parallelism](https://docs.nvidia.com/hpc-sdk/compilers/hpc-compilers-user-guide/index.html#stdpar-cpp)
