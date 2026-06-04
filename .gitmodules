@@ -1,0 +1,3 @@
+[submodule "Labs/2026/13_parallel_heat_equation/stdexec"]
+	path = Labs/2026/13_parallel_heat_equation/stdexec
+	url = https://github.com/NVIDIA/stdexec.git
